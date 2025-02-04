@@ -1,21 +1,22 @@
 "use client"
+import { AppDispatch } from "@/features/store";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { addProduct } from "../features/productSlice";
+import { addProduct } from "../features/productSlice";
 
 export const ProductForm = () => {
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
     const [stock, setStock] = useState(0);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
-    //   const handleAddProduct = (e) => {
-    //     e.preventDefault();
-    //     dispatch(addProduct({ name, price, stock })); onSubmit={handleAddProduct}
-    //   };
+      const handleAddProduct = (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        dispatch(addProduct({ nom: name, prix: price, stock: stock }));
+      };
     return <div className="px-[10%]">
         <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter un Produit</h2>
-        <form>
+        <form onSubmit={handleAddProduct}>
             <div className="mt-2">
                 <label htmlFor="nom">Nom du produit</label>
                 <input

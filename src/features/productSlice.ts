@@ -5,8 +5,8 @@ import { db } from '@/servicces/firebase'
 
 interface ProductState {
     nom: string;
-    prix: string;
-    stock: string;
+    prix: number;
+    stock: number;
 }
 
 interface InitialState {

@@ -17,14 +17,18 @@ interface SaleState {
 
 interface InitialState {
     loading: boolean,
+    salesLast7Days: any[],
+    salesByProduct: any[],
     sales: SaleState[] | null,
     error: string
 }
 
 const initialState: InitialState = {
     loading: false,
+    salesLast7Days: [],
     sales: null,
-    error: ""
+    error: "",
+    salesByProduct: []
 }
 
 export const addSale = createAsyncThunk("sale/addSale", async (data: SaleState) => {
@@ -126,6 +130,50 @@ export const fetchLast10Sales = createAsyncThunk("sale/last10", async () => {
     }));
 
     return last10Sales;
+});
+
+// Fonction pour récupérer les ventes des 7 derniers jours
+export const fetchSalesLast7Days = createAsyncThunk("sale/last7Days", async () => {
+    const startDate = dayjs().subtract(7, "day").format("YYYY-MM-DD");
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", ">=", startDate));
+    const snapshot = await getDocs(q);
+
+    // Initialisation des données par jour
+    let salesData: { [key: string]: number } = {};
+    for (let i = 6; i >= 0; i--) {
+        const date = dayjs().subtract(i, "day").format("YYYY-MM-DD");
+        salesData[date] = 0;
+    }
+
+    // Parcourir les ventes et additionner les montants
+    snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        if (salesData[data.date] !== undefined) {
+            salesData[data.date] += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+        }
+    });
+
+    return salesData;
+});
+
+export const fetchSalesByProduct = createAsyncThunk("sale/byProduct", async () => {
+    const salesRef = collection(db, "sales");
+    const snapshot = await getDocs(salesRef);
+
+    let productSales: { [key: string]: number } = {};
+
+    snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        data.articles.forEach((article: { nom: string | number; total: any; }) => {
+            if (!productSales[article.nom]) {
+                productSales[article.nom] = 0;
+            }
+            productSales[article.nom] += article.total;
+        });
+    });
+
+    return productSales;
 });
 
 const saleSlice = createSlice({

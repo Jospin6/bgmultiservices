@@ -1,48 +1,81 @@
-"use client"
+"use client";
+
 import { useState } from "react";
+import { addSale } from "@/features/saleSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/features/store";
+
+interface Article {
+    nom: string;
+    quantite: string;
+    prix: string;
+}
+
+interface SaleState {
+    date: string;
+    articles: Article[];
+    total: string;
+}
 
 export const SaleForm = () => {
     const [date, setDate] = useState("");
-    const [articles, setArticles] = useState<{ name: string; quantity: number; unitPrice: number; totalPrice: number }[]>([]);
+    const [articles, setArticles] = useState<Article[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
 
     const addArticle = () => {
-        setArticles([...articles, { name: "", quantity: 1, unitPrice: 0, totalPrice: 0 }]);
+        setArticles([...articles, { nom: "", quantite: "1", prix: "0" }]);
     };
-    return <div className="px-[10%]">
-        <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter une vente</h2>
-        <div className="mt-2">
-            <label htmlFor="datejour">Date du jour</label>
-            <input
-                type="date"
-                id="datejour"
-                className="block border-[1px] border-gray-300 w-full rounded-lg h-[35px]"
-                onChange={(e) => setDate(e.target.value)} />
-        </div>
-        <button onClick={addArticle} className="px-[10px] py-[3px] rounded-lg bg-gray-600 my-2 text-gray-100">Ajouter un article</button>
-        {articles.map((article, index) => (
-            <div key={index}>
-                <input type="text" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Nom du produit" onChange={(e) => {
-                    const updatedArticles = [...articles];
-                    updatedArticles[index].name = e.target.value;
-                    setArticles(updatedArticles);
-                }} />
-                <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Quantité" onChange={(e) => {
-                    const updatedArticles = [...articles];
-                    updatedArticles[index].quantity = Number(e.target.value);
-                    updatedArticles[index].totalPrice = updatedArticles[index].quantity * updatedArticles[index].unitPrice;
-                    setArticles(updatedArticles);
-                }} />
-                <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Prix unitaire" onChange={(e) => {
-                    const updatedArticles = [...articles];
-                    updatedArticles[index].unitPrice = Number(e.target.value);
-                    updatedArticles[index].totalPrice = updatedArticles[index].quantity * updatedArticles[index].unitPrice;
-                    setArticles(updatedArticles);
-                }} />
-                <p>Total: {articles[index].totalPrice} €</p>
+
+    const handleSubmit = async () => {
+        const total = articles.reduce((sum, article) => sum + Number(article.quantite) * Number(article.prix), 0).toString();
+        const saleData: SaleState = {
+            date,
+            articles,
+            total
+        };
+
+        dispatch(addSale(saleData));
+        setDate("");
+        setArticles([]);
+    };
+
+    return (
+        <div className="px-[10%]">
+            <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter une vente</h2>
+            <div className="mt-2">
+                <label htmlFor="datejour">Date du jour</label>
+                <input
+                    type="date"
+                    id="datejour"
+                    className="block border-[1px] border-gray-300 w-full rounded-lg h-[35px]"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
             </div>
-        ))}
-        <div className="flex justify-end">
-            <button className="px-[10px] py-[3px] rounded-lg bg-blue-400 my-2 text-gray-100">Ajouter</button>
+            <button onClick={addArticle} className="px-[10px] py-[3px] rounded-lg bg-gray-600 my-2 text-gray-100">Ajouter un article</button>
+            {articles.map((article, index) => (
+                <div key={index} className="mt-2">
+                    <input type="text" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Nom du produit" value={article.nom} onChange={(e) => {
+                        const updatedArticles = [...articles];
+                        updatedArticles[index].nom = e.target.value;
+                        setArticles(updatedArticles);
+                    }} />
+                    <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Quantité" value={article.quantite} onChange={(e) => {
+                        const updatedArticles = [...articles];
+                        updatedArticles[index].quantite = e.target.value;
+                        setArticles(updatedArticles);
+                    }} />
+                    <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Prix unitaire" value={article.prix} onChange={(e) => {
+                        const updatedArticles = [...articles];
+                        updatedArticles[index].prix = e.target.value;
+                        setArticles(updatedArticles);
+                    }} />
+                    <p>Total: {Number(article.quantite) * Number(article.prix)} €</p>
+                </div>
+            ))}
+            <div className="flex justify-end">
+                <button onClick={handleSubmit} className="px-[10px] py-[3px] rounded-lg bg-blue-400 my-2 text-gray-100">Ajouter</button>
+            </div>
         </div>
-    </div>
-}
+    );
+};
