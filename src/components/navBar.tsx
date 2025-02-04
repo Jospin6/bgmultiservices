@@ -8,16 +8,16 @@ export const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="w-full h-[80px] bg-blue-600 text-white shadow-md">
+        <nav className="w-full h-[80px] bg-blue-400 text-white shadow-md">
             <div className="container mx-auto flex justify-between items-center h-full px-6">
                 {/* Logo */}
                 <div className="text-2xl font-bold">BgMultiServices</div>
 
                 {/* Menu Desktop */}
                 <div className="hidden md:flex space-x-8 text-lg">
-                    {/* <Link href="/impression" className="hover:text-gray-200 transition">
-                        Impression
-                    </Link> */}
+                    <Link href="/" className="hover:text-gray-200 transition">
+                        Accueil
+                    </Link>
                     <Link href="/sales" className="hover:text-gray-200 transition">
                         Vente
                     </Link>
