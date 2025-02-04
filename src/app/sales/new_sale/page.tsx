@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 
-export default function Sales() {
+export default function NewSale() {
   const [date, setDate] = useState("");
   const [articles, setArticles] = useState<{ name: string; quantity: number; unitPrice: number; totalPrice: number }[]>([]);
 
