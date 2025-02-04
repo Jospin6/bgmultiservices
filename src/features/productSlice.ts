@@ -4,9 +4,9 @@ import { db } from '@/servicces/firebase'
 
 
 interface ProductState {
-    nom: string | null;
-    prix: string | null;
-    stock: string | null;
+    nom: string;
+    prix: string;
+    stock: string;
 }
 
 interface InitialState {

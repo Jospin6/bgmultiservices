@@ -10,9 +10,9 @@ interface Article {
 }
 
 interface SaleState {
-    date: string | null;
-    articles: Article[] | null;
-    total: string | null
+    date: string;
+    articles: Article[];
+    total: string
 }
 
 interface InitialState {
