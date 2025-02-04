@@ -44,16 +44,19 @@ export const NavBar = () => {
             {isOpen && (
                 <div className="md:hidden bg-blue-700 py-4 z-10">
                     <div className="flex flex-col items-center space-y-4 text-lg">
-                        <Link href="/impression" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
-                            Impression
+                        <Link href="/" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                            Accueil
                         </Link>
-                        <Link href="/vente" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                        <Link href="/sales" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
                             Vente
                         </Link>
-                        <Link href="/produits" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                        <Link href="/products" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
                             Produits
                         </Link>
-                        <Link href="/compte" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                        <Link href="/impressions" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                            Impressions
+                        </Link>
+                        <Link href="/account" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
                             Compte
                         </Link>
                     </div>
