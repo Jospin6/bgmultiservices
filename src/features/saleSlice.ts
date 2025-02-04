@@ -17,8 +17,8 @@ interface SaleState {
 
 interface InitialState {
     loading: boolean,
-    salesLast7Days: any[],
-    salesByProduct: any[],
+    salesLast7Days: any[] | null,
+    salesByProduct: any[] | null,
     sales: SaleState[] | null,
     error: string
 }
@@ -181,18 +181,70 @@ const saleSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchSales.pending, (state) => {
-            state.loading = true
-        })
-        builder.addCase(fetchSales.fulfilled, (state, action: PayloadAction<any>) => {
-            state.loading = false
-            state.sales = action.payload
-        })
-        builder.addCase(fetchSales.rejected, (state, action: PayloadAction<any>) => {
-            state.loading = false
-            state.error = action.payload
-        })
+        builder
+            .addCase(addSale.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addSale.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(addSale.rejected, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchSales.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchSales.fulfilled, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.sales = action.payload;
+            })
+            .addCase(fetchSales.rejected, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateSale.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateSale.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(updateSale.rejected, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(deleteSale.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(deleteSale.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(deleteSale.rejected, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchSalesCountToday.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesLast7Days = action.payload;
+            })
+            .addCase(fetchTotalSalesCount.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesByProduct = action.payload;
+            })
+            .addCase(fetchSalesAmountToday.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesLast7Days = action.payload;
+            })
+            .addCase(fetchTotalSalesAmount.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesByProduct = action.payload;
+            })
+            .addCase(fetchLast10Sales.fulfilled, (state, action: PayloadAction<any[]>) => {
+                state.sales = action.payload;
+            })
+            .addCase(fetchSalesLast7Days.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesLast7Days = action.payload;
+            })
+            .addCase(fetchSalesByProduct.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesByProduct = action.payload;
+            });
     }
-})
+});
 
-export default saleSlice.reducer
+export default saleSlice.reducer;
