@@ -1,3 +1,4 @@
+"use client";
 import { ImpressionForm } from "@/components/impressionForm";
 
 export default function Impressions() {

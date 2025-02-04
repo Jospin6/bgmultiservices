@@ -1,3 +1,4 @@
+"use client";
 import { SaleForm } from "@/components/saleForm";
 import { Printer } from "lucide-react";
 
