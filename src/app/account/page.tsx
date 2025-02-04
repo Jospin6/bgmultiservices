@@ -6,9 +6,9 @@ import { AppDispatch, RootState } from "@/features/store";
 export default function Account() {
     const dispatch = useDispatch<AppDispatch>();
     const users = useSelector((state: RootState) => state.auth.users);
-    
+
     const [newUser, setNewUser] = useState({ name: "", password: "", role: "utilisateur" });
-    
+
     useEffect(() => {
         dispatch(fetchUsers());
     }, [dispatch]);
@@ -26,27 +26,27 @@ export default function Account() {
     return (
         <div className="p-6">
             <h2 className="text-xl font-bold mb-4">Gestion des utilisateurs</h2>
-            
+
             <form onSubmit={handleCreateUser} className="mb-6 space-y-2">
-                <input 
-                    type="text" 
-                    placeholder="Nom" 
-                    value={newUser.name} 
-                    onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} 
+                <input
+                    type="text"
+                    placeholder="Nom"
+                    value={newUser.name}
+                    onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
                     className="border p-2 rounded w-full"
                     required
                 />
-                <input 
-                    type="password" 
-                    placeholder="Mot de passe" 
-                    value={newUser.password} 
-                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} 
+                <input
+                    type="password"
+                    placeholder="Mot de passe"
+                    value={newUser.password}
+                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
                     className="border p-2 rounded w-full"
                     required
                 />
-                <select 
-                    value={newUser.role} 
-                    onChange={(e) => setNewUser({ ...newUser, role: e.target.value })} 
+                <select
+                    value={newUser.role}
+                    onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
                     className="border p-2 rounded w-full"
                 >
                     <option value="utilisateur">Utilisateur</option>
@@ -54,7 +54,7 @@ export default function Account() {
                 </select>
                 <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Créer un utilisateur</button>
             </form>
-            
+
             <table className="w-full border-collapse border border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
