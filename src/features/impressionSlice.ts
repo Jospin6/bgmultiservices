@@ -5,8 +5,8 @@ import dayjs from "dayjs";
 
 interface ImpressionState {
     date: string;
-    totalPapers: string;
-    amount: string
+    totalPapers: number;
+    amount: number
 }
 
 interface InitialState {
@@ -76,7 +76,7 @@ export const fetchImpressionsAmountCurrentMonth = createAsyncThunk(
             totalAmount += doc.data().montant || 0;
         });
 
-        return totalAmount; // Montant total des impressions du mois
+        return totalAmount;
     }
 );
 

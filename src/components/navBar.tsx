@@ -24,6 +24,9 @@ export const NavBar = () => {
                     <Link href="/products" className="hover:text-gray-200 transition">
                         Produits
                     </Link>
+                    <Link href="/impressions" className="hover:text-gray-200 transition">
+                        Impression
+                    </Link>
                     <Link href="/account" className="hover:text-gray-200 transition">
                         Compte
                     </Link>
