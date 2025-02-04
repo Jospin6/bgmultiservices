@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from '@/servicces/firebase'
+import dayjs from "dayjs";
 
 interface ImpressionState {
     date: string;
@@ -60,6 +61,42 @@ export const deleteImpression = createAsyncThunk("impression/deleteImpression", 
         console.error("Erreur lors de la suppression :", e);
     }
 })
+
+// Fonction pour obtenir le montant des impressions du mois courant
+export const fetchImpressionsAmountCurrentMonth = createAsyncThunk(
+    "impression/amountCurrentMonth",
+    async () => {
+        const startOfMonth = dayjs().startOf("month").format("YYYY-MM");
+        const impressionsRef = collection(db, "impressions");
+        const q = query(impressionsRef, where("date", ">=", startOfMonth));
+        const snapshot = await getDocs(q);
+
+        let totalAmount = 0;
+        snapshot.docs.forEach((doc) => {
+            totalAmount += doc.data().montant || 0;
+        });
+
+        return totalAmount; // Montant total des impressions du mois
+    }
+);
+
+// Fonction pour obtenir le nombre de papiers imprimés dans le mois courant
+export const fetchPrintedPapersCountCurrentMonth = createAsyncThunk(
+    "impression/papersCountCurrentMonth",
+    async () => {
+        const startOfMonth = dayjs().startOf("month").format("YYYY-MM");
+        const impressionsRef = collection(db, "impressions");
+        const q = query(impressionsRef, where("date", ">=", startOfMonth));
+        const snapshot = await getDocs(q);
+
+        let totalPrintedPapers = 0;
+        snapshot.docs.forEach((doc) => {
+            totalPrintedPapers += doc.data().nombre || 0;
+        });
+
+        return totalPrintedPapers; // Nombre total de papiers imprimés dans le mois
+    }
+);
 
 const impressionSlice = createSlice({
     name: "impression",

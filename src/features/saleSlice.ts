@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, limit } from "firebase/firestore";
 import { db } from '@/servicces/firebase'
-import { error } from "console";
+import dayjs from "dayjs";
 
 interface Article {
     nom: string;
@@ -67,6 +67,66 @@ export const deleteSale = createAsyncThunk("sale/deleteSale", async (id: string)
         console.error("Erreur lors de la suppression :", e);
     }
 })
+
+// Fonction pour obtenir le nombre de ventes du jour
+export const fetchSalesCountToday = createAsyncThunk("sale/fetchSalesCountToday", async () => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", "==", today));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.length; // Nombre de ventes du jour
+});
+
+// Fonction pour obtenir le nombre total de ventes
+export const fetchTotalSalesCount = createAsyncThunk("sale/fetchTotalSalesCount", async () => {
+    const salesRef = collection(db, "sales");
+    const snapshot = await getDocs(salesRef);
+    return snapshot.docs.length; // Nombre total de ventes
+});
+
+// Fonction pour obtenir le montant total des ventes du jour
+export const fetchSalesAmountToday = createAsyncThunk("sale/amountToday", async () => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", "==", today));
+    const snapshot = await getDocs(q);
+
+    let totalAmount = 0;
+    snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        totalAmount += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+    });
+
+    return totalAmount; // Montant total des ventes du jour
+});
+
+// Fonction pour obtenir le montant total de toutes les ventes
+export const fetchTotalSalesAmount = createAsyncThunk("sale/totalAmount", async () => {
+    const salesRef = collection(db, "sales");
+    const snapshot = await getDocs(salesRef);
+
+    let totalAmount = 0;
+    snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        totalAmount += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+    });
+
+    return totalAmount;
+});
+
+// Fonction pour récupérer les 10 dernières ventes
+export const fetchLast10Sales = createAsyncThunk("sale/last10", async () => {
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, orderBy("created_at", "desc"), limit(10));
+    const snapshot = await getDocs(q);
+
+    const last10Sales = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+
+    return last10Sales;
+});
 
 const saleSlice = createSlice({
     name: "sale",

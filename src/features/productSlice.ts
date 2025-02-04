@@ -64,6 +64,19 @@ export const deleteProduct = createAsyncThunk("product/deleteProduct", async (id
     }
 })
 
+// Fonction pour obtenir le nombre total de produits en stock
+export const fetchTotalProductsInStock = createAsyncThunk("product/totalStock", async () => {
+    const productsRef = collection(db, "products");
+    const snapshot = await getDocs(productsRef);
+
+    let totalStock = 0;
+    snapshot.docs.forEach((doc) => {
+        totalStock += doc.data().stock || 0;
+    });
+
+    return totalStock; // Nombre total de produits en stock
+});
+
 const productSlice = createSlice({
     name: "product",
     initialState,
