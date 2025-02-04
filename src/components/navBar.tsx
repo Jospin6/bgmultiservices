@@ -15,16 +15,16 @@ export const NavBar = () => {
 
                 {/* Menu Desktop */}
                 <div className="hidden md:flex space-x-8 text-lg">
-                    <Link href="/impression" className="hover:text-gray-200 transition">
+                    {/* <Link href="/impression" className="hover:text-gray-200 transition">
                         Impression
-                    </Link>
-                    <Link href="/vente" className="hover:text-gray-200 transition">
+                    </Link> */}
+                    <Link href="/sales" className="hover:text-gray-200 transition">
                         Vente
                     </Link>
-                    <Link href="/produits" className="hover:text-gray-200 transition">
+                    <Link href="/products" className="hover:text-gray-200 transition">
                         Produits
                     </Link>
-                    <Link href="/compte" className="hover:text-gray-200 transition">
+                    <Link href="/account" className="hover:text-gray-200 transition">
                         Compte
                     </Link>
                 </div>
