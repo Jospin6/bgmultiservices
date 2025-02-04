@@ -11,6 +11,8 @@ interface ImpressionState {
 
 interface InitialState {
     loading: boolean;
+    impressionsAmountCurrentMonth: number | null,
+    printedPapersCountCurrentMonth: number | null,
     impression: ImpressionState[] | null;
     error: string;
 }
@@ -18,7 +20,9 @@ interface InitialState {
 const initialState: InitialState = {
     loading: false,
     impression: null,
-    error: ""
+    error: "",
+    impressionsAmountCurrentMonth: 0,
+    printedPapersCountCurrentMonth: 0
 };
 
 export const addImpression = createAsyncThunk("impression/addImpression", async (data: ImpressionState) => {
@@ -95,13 +99,11 @@ const impressionSlice = createSlice({
                 state.impression = state.impression.filter(imp => imp.date !== action.payload);
             }
         });
-        builder.addCase(fetchImpressionsAmountCurrentMonth.fulfilled, (state, action: PayloadAction<number>) => {
-            state.loading = false;
-            state.error = "";
+        builder.addCase(fetchImpressionsAmountCurrentMonth.fulfilled, (state, action: PayloadAction<any>) => {
+            state.impressionsAmountCurrentMonth = action.payload
         });
         builder.addCase(fetchPrintedPapersCountCurrentMonth.fulfilled, (state, action: PayloadAction<number>) => {
-            state.loading = false;
-            state.error = "";
+            state.printedPapersCountCurrentMonth = action.payload;
         });
     }
 });

@@ -11,6 +11,7 @@ interface ProductState {
 
 interface InitialState {
     loading: boolean;
+    totalProductsInStock: number | null,
     products: ProductState[] | null;
     error: string;
 }
@@ -18,7 +19,8 @@ interface InitialState {
 const initialState: InitialState = {
     loading: false,
     products: null,
-    error: ""
+    error: "",
+    totalProductsInStock: 0
 };
 
 export const addProduct = createAsyncThunk("product/addProduct", async (data: ProductState) => {
@@ -81,9 +83,8 @@ const productSlice = createSlice({
                 state.products = state.products.filter(prod => prod.id !== action.payload);
             }
         });
-        builder.addCase(fetchTotalProductsInStock.fulfilled, (state, action: PayloadAction<number>) => {
-            state.loading = false;
-            state.error = "";
+        builder.addCase(fetchTotalProductsInStock.fulfilled, (state, action: PayloadAction<any>) => {
+            state.totalProductsInStock = action.payload;
         });
     }
 });

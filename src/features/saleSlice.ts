@@ -17,6 +17,10 @@ interface SaleState {
 
 interface InitialState {
     loading: boolean,
+    salesCountToday: number | null,
+    totalSalesCount: number | null,
+    salesAmountToday: number | null,
+    totalSalesAmount: number | null,
     salesLast7Days: any[] | null,
     salesByProduct: any[] | null,
     sales: SaleState[] | null,
@@ -28,7 +32,11 @@ const initialState: InitialState = {
     salesLast7Days: [],
     sales: null,
     error: "",
-    salesByProduct: []
+    salesByProduct: [],
+    salesCountToday: 0,
+    totalSalesCount: 0,
+    salesAmountToday: 0,
+    totalSalesAmount: 0
 }
 
 export const addSale = createAsyncThunk("sale/addSale", async (data: SaleState) => {
@@ -224,16 +232,16 @@ const saleSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(fetchSalesCountToday.fulfilled, (state, action: PayloadAction<any>) => {
-                state.salesLast7Days = action.payload;
+                state.salesCountToday = action.payload;
             })
             .addCase(fetchTotalSalesCount.fulfilled, (state, action: PayloadAction<any>) => {
-                state.salesByProduct = action.payload;
+                state.totalSalesCount = action.payload;
             })
             .addCase(fetchSalesAmountToday.fulfilled, (state, action: PayloadAction<any>) => {
-                state.salesLast7Days = action.payload;
+                state.salesAmountToday = action.payload;
             })
             .addCase(fetchTotalSalesAmount.fulfilled, (state, action: PayloadAction<any>) => {
-                state.salesByProduct = action.payload;
+                state.totalSalesAmount = action.payload;
             })
             .addCase(fetchLast10Sales.fulfilled, (state, action: PayloadAction<any[]>) => {
                 state.sales = action.payload;

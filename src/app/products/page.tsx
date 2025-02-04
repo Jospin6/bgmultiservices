@@ -1,11 +1,22 @@
 "use client";
 import { ProductForm } from "@/components/productForm";
+import { AppDispatch, RootState } from "@/features/store";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {fetchProducts} from "@/features/productSlice"
 
 export default function Products() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, products } = useSelector((state: RootState) => state.product)
+    
+    useEffect(() => {
+        dispatch(fetchProducts())
+    }, [])
+
     return (
         <>
             <div className="text-2xl py-4">produits</div>
-            <ProductForm/>
+            <ProductForm />
             <div className="text-xl py-4">
                 les produits en stock
             </div>
@@ -15,19 +26,23 @@ export default function Products() {
                         <th>Article</th>
                         <th>Prix</th>
                         <th>Stock</th>
-                        <th>Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr className="border-b-[1px] border-gray-300">
-                        <td>Maraguca</td>
-                        <td>3000fc</td>
-                        <td>2</td>
-                        <td>12/2/2025</td>
-                        <td className="flex justify-center">dd</td>
-                    </tr>
-                </tbody>
+                {loading ? (<div>Loading...</div>) : (
+                    <tbody>
+                        {
+                            products?.map(product => (
+                                <tr className="border-b-[1px] border-gray-300">
+                                    <td> {product.nom} </td>
+                                    <td>{product.prix} fc</td>
+                                    <td>{product.stock}</td>
+                                    <td className="flex justify-center">dd</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                )}
             </table>
         </>
     )
