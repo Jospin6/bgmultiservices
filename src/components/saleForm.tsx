@@ -4,18 +4,9 @@ import { useState } from "react";
 import { addSale } from "@/features/saleSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/features/store";
+import {SaleState, Article } from "@/helpers/types"
+import { Timestamp } from "firebase/firestore";
 
-interface Article {
-    nom: string;
-    quantite: string;
-    prix: string;
-}
-
-interface SaleState {
-    date: string;
-    articles: Article[];
-    total: string;
-}
 
 export const SaleForm = () => {
     const [date, setDate] = useState("");
@@ -23,13 +14,12 @@ export const SaleForm = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const addArticle = () => {
-        setArticles([...articles, { nom: "", quantite: "1", prix: "0" }]);
+        setArticles([...articles, { nom: "", quantite: 1, prix: 0 }]);
     };
-
     const handleSubmit = async () => {
-        const total = articles.reduce((sum, article) => sum + Number(article.quantite) * Number(article.prix), 0).toString();
+        const total = articles.reduce((sum, article) => sum + Number(article.quantite) * Number(article.prix), 0);
         const saleData: SaleState = {
-            date,
+            date: new Date(date).toISOString(),
             articles,
             total
         };
@@ -62,12 +52,12 @@ export const SaleForm = () => {
                     }} />
                     <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Quantité" value={article.quantite} onChange={(e) => {
                         const updatedArticles = [...articles];
-                        updatedArticles[index].quantite = e.target.value;
+                        updatedArticles[index].quantite = Number(e.target.value);
                         setArticles(updatedArticles);
                     }} />
                     <input type="number" className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2" placeholder="Prix unitaire" value={article.prix} onChange={(e) => {
                         const updatedArticles = [...articles];
-                        updatedArticles[index].prix = e.target.value;
+                        updatedArticles[index].prix = Number(e.target.value);
                         setArticles(updatedArticles);
                     }} />
                     <p>Total: {Number(article.quantite) * Number(article.prix)} €</p>

@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, Timestamp } from "firebase/firestore";
 import { db } from '@/servicces/firebase';
 import dayjs from "dayjs";
 
 interface ImpressionState {
+    id?: string;
     date: string;
     totalPapers: number;
     amount: number;
@@ -93,11 +94,11 @@ const impressionSlice = createSlice({
             if (state.impression) {
                 state.impression = state.impression.map(imp => imp.date === action.payload.date ? action.payload : imp);
             }
-        });
         builder.addCase(deleteImpression.fulfilled, (state, action: PayloadAction<string>) => {
             if (state.impression) {
-                state.impression = state.impression.filter(imp => imp.date !== action.payload);
+                state.impression = state.impression.filter(imp => imp.id !== action.payload);
             }
+        });
         });
         builder.addCase(fetchImpressionsAmountCurrentMonth.fulfilled, (state, action: PayloadAction<any>) => {
             state.impressionsAmountCurrentMonth = action.payload

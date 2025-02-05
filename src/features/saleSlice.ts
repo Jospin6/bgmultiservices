@@ -2,19 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, limit } from "firebase/firestore";
 import { db } from '@/servicces/firebase'
 import dayjs from "dayjs";
-
-interface Article {
-    nom: string;
-    quantite: string;
-    prix: string
-}
-
-interface SaleState {
-    id?: string;
-    date: string;
-    articles: Article[];
-    total: string
-}
+import {SaleState} from "@/helpers/types"
 
 interface InitialState {
     loading: boolean,

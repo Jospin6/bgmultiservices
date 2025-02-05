@@ -26,7 +26,6 @@ export default function Products() {
                         <th>Article</th>
                         <th>Prix</th>
                         <th>Stock</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,8 +34,7 @@ export default function Products() {
                             <tr className="border-b-[1px] border-gray-300">
                                 <td> {product.nom} </td>
                                 <td>{product.prix} fc</td>
-                                <td>{product.stock}</td>
-                                <td className="flex justify-center">dd</td>
+                                <td>{product.stock} pieces</td>
                             </tr>
                         ))
                     }

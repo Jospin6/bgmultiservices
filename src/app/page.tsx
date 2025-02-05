@@ -48,11 +48,11 @@ export default function Home() {
     <>
       <div className="grid grid-cols-8 gap-4 mt-4">
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
-          <div className="text-2xl font-[500]"> {Number(salesCountToday) ?? 0} </div>
+          <div className="text-2xl font-[500]"> {salesCountToday ?? 0} </div>
           <div className="text-[14px] text-gray-400">Nbr vente du jour</div>
         </div>
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
-          <div className="text-2xl font-[500]"> {Number(salesAmountToday) ?? 0} fc </div>
+          <div className="text-2xl font-[500]"> {salesAmountToday ?? 0} fc </div>
           <div className="text-[14px] text-gray-400">Montant encaisé</div>
         </div>
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
@@ -78,7 +78,7 @@ export default function Home() {
             <div className="text-[14px] text-gray-400">Nbr total des ventes</div>
           </div>
           <div className="shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]">{Number(totalSalesAmount) ?? 0} fc</div>
+            <div className="text-2xl font-[500]">{totalSalesAmount ?? 0} fc</div>
             <div className="text-[14px] text-gray-400">Tot montant ventes</div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function Home() {
         <tbody>
           {sales && sales.length > 0 ? (
             sales!.map(sale => (
-              <tr className="border-b-[1px] border-gray-300" key={sale?.id}>
+              <tr className="border-b-[1px] border-gray-300" key={sale.id}>
                 <td> {sale.date} </td>
                 <td>
                   { 

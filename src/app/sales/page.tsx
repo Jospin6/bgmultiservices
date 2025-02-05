@@ -7,19 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSales } from "@/features/saleSlice";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {SaleState} from "@/helpers/types"
 
-interface Article {
-  nom: string;
-  quantite: string;
-  prix: string;
-}
-
-export interface SaleState {
-  id?: string;
-  date: string;
-  articles: Article[];
-  total: string;
-}
 
 // Fonction pour générer un PDF
 const generatePDF = (sale: SaleState) => {

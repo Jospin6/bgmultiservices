@@ -27,17 +27,15 @@ export default function Impressions() {
                         <th>Date</th>
                         <th>Nombre des papiers</th>
                         <th>Montant</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         impression?.map(impr => (
-                            <tr className="border-b-[1px] border-gray-300">
+                            <tr className="border-b-[1px] border-gray-300" key={impr.id}>
                                 <td> {impr.date} </td>
                                 <td> {impr.totalPapers} </td>
-                                <td> {impr.amount} </td>
-                                <td className="flex justify-center">dd</td>
+                                <td> {impr.amount} fc </td>
                             </tr>
                         ))
                     }
