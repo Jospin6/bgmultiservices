@@ -93,10 +93,10 @@ export const fetchSalesAmountToday = createAsyncThunk("sale/amountToday", async 
     const q = query(salesRef, where("date", "==", today));
     const snapshot = await getDocs(q);
 
-    let totalAmount = 0;
+    let totalAmount: number = 0;
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        totalAmount += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+        totalAmount += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
     });
 
     return totalAmount; // Montant total des ventes du jour
@@ -107,10 +107,10 @@ export const fetchTotalSalesAmount = createAsyncThunk("sale/totalAmount", async 
     const salesRef = collection(db, "sales");
     const snapshot = await getDocs(salesRef);
 
-    let totalAmount = 0;
+    let totalAmount: number = 0;
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        totalAmount += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+        totalAmount += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
     });
 
     return totalAmount;
