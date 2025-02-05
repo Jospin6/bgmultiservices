@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, limit } from "firebase/firestore";
 import { db } from '@/servicces/firebase'
 import dayjs from "dayjs";
-import {SaleState} from "@/helpers/types"
+import { SaleState } from "@/helpers/types"
 
 interface InitialState {
     loading: boolean,
@@ -119,7 +119,7 @@ export const fetchTotalSalesAmount = createAsyncThunk("sale/totalAmount", async 
 // Fonction pour récupérer les 10 dernières ventes
 export const fetchLast10Sales = createAsyncThunk("sale/last10", async () => {
     const salesRef = collection(db, "sales");
-    const q = query(salesRef, orderBy("created_at", "desc"), limit(10));
+    const q = query(salesRef, orderBy("date", "desc"), limit(10));
     const snapshot = await getDocs(q);
 
     const last10Sales = snapshot.docs.map((doc) => ({
@@ -132,23 +132,37 @@ export const fetchLast10Sales = createAsyncThunk("sale/last10", async () => {
 
 // Fonction pour récupérer les ventes des 7 derniers jours
 export const fetchSalesLast7Days = createAsyncThunk("sale/last7Days", async () => {
-    const startDate = dayjs().subtract(7, "day").format("YYYY-MM-DD");
+    // Calcul de la date de début pour les 7 derniers jours (sans dayjs)
+    const now = new Date();
+    const startDate = new Date();
+    startDate.setDate(now.getDate() - 7); // Soustraire 7 jours
+    startDate.setHours(0, 0, 0, 0); // Mettre à zéro l'heure pour comparer uniquement les jours
+    
     const salesRef = collection(db, "sales");
-    const q = query(salesRef, where("date", ">=", startDate));
+    const q = query(salesRef, where("date", ">=", startDate.toISOString())); // Utilisation du format ISO
     const snapshot = await getDocs(q);
-
-    // Initialisation des données par jour
+    
+    // Initialisation des données des 7 derniers jours
     let salesData: { [key: string]: number } = {};
+    
     for (let i = 6; i >= 0; i--) {
-        const date = dayjs().subtract(i, "day").format("YYYY-MM-DD");
-        salesData[date] = 0;
+        const date = new Date();
+        date.setDate(now.getDate() - i);
+        const formattedDate = date.toISOString().split("T")[0]; // Format "YYYY-MM-DD"
+        salesData[formattedDate] = 0;
     }
 
-    // Parcourir les ventes et additionner les montants
+    // Traitement des ventes pour chaque jour
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        if (salesData[data.date] !== undefined) {
-            salesData[data.date] += data.articles.reduce((acc: any, article: { total: any; }) => acc + article.total, 0);
+        
+        // Conversion de la date de la vente
+        const saleDateObj = new Date(data.date); // Supposé être une date au format ISO
+        const saleDate = saleDateObj.toISOString().split("T")[0]; // Format "YYYY-MM-DD"
+
+        // Vérifier si la date appartient aux 7 derniers jours
+        if (salesData.hasOwnProperty(saleDate)) {
+            salesData[saleDate] += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
         }
     });
 
