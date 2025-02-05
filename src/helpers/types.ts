@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 interface Article {
     nom: string;
     quantite: number;
