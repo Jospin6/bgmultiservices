@@ -5,25 +5,43 @@ import { AppDispatch, RootState } from "@/features/store";
 import { Printer } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLast10Sales } from "@/features/saleSlice"
+import {
+  fetchLast10Sales,
+  fetchSalesCountToday,
+  fetchTotalSalesCount,
+  fetchSalesAmountToday,
+  fetchTotalSalesAmount
+} from "@/features/saleSlice"
+import {
+  fetchImpressionsAmountCurrentMonth,
+  fetchPrintedPapersCountCurrentMonth
+} from "@/features/impressionSlice"
+import { fetchTotalProductsInStock } from "@/features/productSlice"
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
-  const { 
-    loading, 
-    sales, 
-    salesCountToday, 
-    totalSalesCount, 
-    salesAmountToday, 
-    totalSalesAmount } = useSelector((state: RootState) => state.sale)
-  const {totalProductsInStock} = useSelector((state: RootState) => state.product)
   const {
-    impressionsAmountCurrentMonth, 
-    printedPapersCountCurrentMonth} = useSelector((state: RootState) => state.impression)
+    loading,
+    sales,
+    salesCountToday,
+    totalSalesCount,
+    salesAmountToday,
+    totalSalesAmount } = useSelector((state: RootState) => state.sale)
+  const { totalProductsInStock } = useSelector((state: RootState) => state.product)
+  const {
+    impressionsAmountCurrentMonth,
+    printedPapersCountCurrentMonth } = useSelector((state: RootState) => state.impression)
 
   useEffect(() => {
     dispatch(fetchLast10Sales())
-  }, [dispatch])
+    dispatch(fetchSalesCountToday())
+    dispatch(fetchTotalSalesCount())
+    dispatch(fetchSalesAmountToday())
+    dispatch(fetchTotalSalesAmount())
+    dispatch(fetchImpressionsAmountCurrentMonth())
+    dispatch(fetchPrintedPapersCountCurrentMonth())
+    dispatch(fetchTotalProductsInStock())
+  }, [])
 
   return (
     <>
@@ -33,15 +51,15 @@ export default function Home() {
           <div className="text-[14px] text-gray-400">Nbr vente du jour</div>
         </div>
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
-          <div className="text-2xl font-[500]"> {salesAmountToday ?? 0} </div>
+          <div className="text-2xl font-[500]"> {salesAmountToday ?? 0} fc </div>
           <div className="text-[14px] text-gray-400">Montant encaisé</div>
         </div>
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
-          <div className="text-2xl font-[500]">{impressionsAmountCurrentMonth ?? 0}</div>
+          <div className="text-2xl font-[500]">{impressionsAmountCurrentMonth ?? 0} fc</div>
           <div className="text-[14px] text-gray-400">Montant impression mois courant</div>
         </div>
         <div className="col-span-2 shadow-lg rounded-lg h-[100px] p-[10px]">
-          <div className="text-2xl font-[500]">{ printedPapersCountCurrentMonth ?? 0 }</div>
+          <div className="text-2xl font-[500]">{printedPapersCountCurrentMonth ?? 0}</div>
           <div className="text-[14px] text-gray-400">Nbr papiers sorties</div>
         </div>
       </div>
@@ -59,7 +77,7 @@ export default function Home() {
             <div className="text-[14px] text-gray-400">Nbr total des ventes</div>
           </div>
           <div className="shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]">{totalSalesAmount ?? 0}</div>
+            <div className="text-2xl font-[500]">{totalSalesAmount ?? 0} fc</div>
             <div className="text-[14px] text-gray-400">Tot montant ventes</div>
           </div>
         </div>
