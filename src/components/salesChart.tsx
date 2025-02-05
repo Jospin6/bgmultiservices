@@ -21,7 +21,7 @@ const SalesChart = () => {
     labels: salesLast7Days ? Object.keys(salesLast7Days) : [],
     datasets: [
       {
-        label: "Ventes (€)",
+        label: "Ventes (fc)",
         data: salesLast7Days ? Object.values(salesLast7Days) : [],
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",

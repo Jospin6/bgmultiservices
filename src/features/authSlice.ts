@@ -19,15 +19,26 @@ const initialState: AuthState = {
   users: []
 };
 
-export const loginUser = createAsyncThunk("auth/loginUser", async ({ name, password }: { name: string; password: string }) => {
-  const usersRef = collection(db, "users");
-  const q = query(usersRef, where("name", "==", name), where("password", "==", password));
-  const querySnapshot = await getDocs(q);
-  if (!querySnapshot.empty) {
-    return name;
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async ({ name, password }: { name: string; password: string }) => {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("name", "==", name), where("password", "==", password));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const firstDocId = querySnapshot.docs[0].id;
+
+      // Stocker l'ID et le nom dans localStorage
+      localStorage.setItem("id", firstDocId);
+      localStorage.setItem("name", name);
+
+      return name;
+    }
+
+    throw new Error("Identifiants incorrects");
   }
-  throw new Error("Identifiants incorrects");
-});
+);
 
 export const createUser = createAsyncThunk("auth/createUser", async (user: User) => {
   const usersRef = collection(db, "users");

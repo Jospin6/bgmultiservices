@@ -72,11 +72,18 @@ export const deleteSale = createAsyncThunk("sale/deleteSale", async (id: string)
 
 // Fonction pour obtenir le nombre de ventes du jour
 export const fetchSalesCountToday = createAsyncThunk("sale/fetchSalesCountToday", async () => {
-    const today = dayjs().format("YYYY-MM-DD");
+    // Obtenir la date d'aujourd'hui au format souhaité  
+    const today = new Date();
+    const year = today.getUTCFullYear();
+    const month = String(today.getUTCMonth() + 1).padStart(2, '0'); // Mois de 0 à 11, donc ajouter 1  
+    const day = String(today.getUTCDate()).padStart(2, '0');
+    const todayISOString = `${year}-${month}-${day}T00:00:00.000Z`; // Format souhaité  
+
     const salesRef = collection(db, "sales");
-    const q = query(salesRef, where("date", "==", today));
+    const q = query(salesRef, where("date", "==", todayISOString));
     const snapshot = await getDocs(q);
-    return snapshot.docs.length; // Nombre de ventes du jour
+
+    return snapshot.docs.length; // Nombre de ventes du jour  
 });
 
 // Fonction pour obtenir le nombre total de ventes
@@ -88,18 +95,23 @@ export const fetchTotalSalesCount = createAsyncThunk("sale/fetchTotalSalesCount"
 
 // Fonction pour obtenir le montant total des ventes du jour
 export const fetchSalesAmountToday = createAsyncThunk("sale/amountToday", async () => {
-    const today = dayjs().format("YYYY-MM-DD");
+    const today = new Date();
+    const year = today.getUTCFullYear();
+    const month = String(today.getUTCMonth() + 1).padStart(2, '0'); // Mois de 0 à 11, donc ajouter 1  
+    const day = String(today.getUTCDate()).padStart(2, '0');
+    const todayISOString = `${year}-${month}-${day}T00:00:00.000Z`; // Convertir en format ISO  
+
     const salesRef = collection(db, "sales");
-    const q = query(salesRef, where("date", "==", today));
+    const q = query(salesRef, where("date", "==", todayISOString));
     const snapshot = await getDocs(q);
 
     let totalAmount: number = 0;
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        totalAmount += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
+        totalAmount += data.total;
     });
 
-    return totalAmount; // Montant total des ventes du jour
+    return totalAmount; // Montant total des ventes du jour  
 });
 
 // Fonction pour obtenir le montant total de toutes les ventes
@@ -110,7 +122,7 @@ export const fetchTotalSalesAmount = createAsyncThunk("sale/totalAmount", async 
     let totalAmount: number = 0;
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        totalAmount += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
+        totalAmount += data.total;
     });
 
     return totalAmount;
@@ -137,14 +149,14 @@ export const fetchSalesLast7Days = createAsyncThunk("sale/last7Days", async () =
     const startDate = new Date();
     startDate.setDate(now.getDate() - 7); // Soustraire 7 jours
     startDate.setHours(0, 0, 0, 0); // Mettre à zéro l'heure pour comparer uniquement les jours
-    
+
     const salesRef = collection(db, "sales");
     const q = query(salesRef, where("date", ">=", startDate.toISOString())); // Utilisation du format ISO
     const snapshot = await getDocs(q);
-    
+
     // Initialisation des données des 7 derniers jours
     let salesData: { [key: string]: number } = {};
-    
+
     for (let i = 6; i >= 0; i--) {
         const date = new Date();
         date.setDate(now.getDate() - i);
@@ -155,7 +167,7 @@ export const fetchSalesLast7Days = createAsyncThunk("sale/last7Days", async () =
     // Traitement des ventes pour chaque jour
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
-        
+
         // Conversion de la date de la vente
         const saleDateObj = new Date(data.date); // Supposé être une date au format ISO
         const saleDate = saleDateObj.toISOString().split("T")[0]; // Format "YYYY-MM-DD"
