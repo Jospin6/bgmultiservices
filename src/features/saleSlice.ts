@@ -10,6 +10,7 @@ interface Article {
 }
 
 interface SaleState {
+    id?: string;
     date: string;
     articles: Article[];
     total: string
@@ -56,6 +57,7 @@ export const fetchSales = createAsyncThunk("sale/fetchSales", async () => {
             ...doc.data(),
         }));
         console.log("ventes récupérés :", produits);
+        return produits;
     } catch (e) {
         console.error("Erreur lors de la récupération :", e);
     }

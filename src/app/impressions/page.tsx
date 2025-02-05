@@ -8,7 +8,7 @@ import { fetchImpressions } from "@/features/impressionSlice"
 export default function Impressions() {
     const dispatch = useDispatch<AppDispatch>();
     const { loading, impression } = useSelector((state: RootState) => state.impression)
-    
+
     useEffect(() => {
         dispatch(fetchImpressions())
     }, [])
@@ -30,20 +30,18 @@ export default function Impressions() {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                {loading ? (<div>Loading...</div>) : (
-                    <tbody>
-                        {
-                            impression?.map(impr => (
-                                <tr className="border-b-[1px] border-gray-300">
-                                    <td> {impr.date} </td>
-                                    <td> {impr.totalPapers} </td>
-                                    <td> {impr.amount} </td>
-                                    <td className="flex justify-center">dd</td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                )}
+                <tbody>
+                    {
+                        impression?.map(impr => (
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td> {impr.date} </td>
+                                <td> {impr.totalPapers} </td>
+                                <td> {impr.amount} </td>
+                                <td className="flex justify-center">dd</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
             </table>
         </>
     )

@@ -3,12 +3,12 @@ import { ProductForm } from "@/components/productForm";
 import { AppDispatch, RootState } from "@/features/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchProducts} from "@/features/productSlice"
+import { fetchProducts } from "@/features/productSlice"
 
 export default function Products() {
     const dispatch = useDispatch<AppDispatch>();
     const { loading, products } = useSelector((state: RootState) => state.product)
-    
+
     useEffect(() => {
         dispatch(fetchProducts())
     }, [])
@@ -29,20 +29,18 @@ export default function Products() {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                {loading ? (<div>Loading...</div>) : (
-                    <tbody>
-                        {
-                            products?.map(product => (
-                                <tr className="border-b-[1px] border-gray-300">
-                                    <td> {product.nom} </td>
-                                    <td>{product.prix} fc</td>
-                                    <td>{product.stock}</td>
-                                    <td className="flex justify-center">dd</td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                )}
+                <tbody>
+                    {
+                        products?.map(product => (
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td> {product.nom} </td>
+                                <td>{product.prix} fc</td>
+                                <td>{product.stock}</td>
+                                <td className="flex justify-center">dd</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
             </table>
         </>
     )

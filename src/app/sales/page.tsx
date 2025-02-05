@@ -2,113 +2,115 @@
 import { SaleForm } from "@/components/saleForm";
 import { AppDispatch, RootState } from "@/features/store";
 import { Printer } from "lucide-react";
-import { forwardRef, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSales } from "@/features/saleSlice"
-import { useReactToPrint } from "react-to-print";
+import { fetchSales } from "@/features/saleSlice";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface Article {
-    nom: string;
-    quantite: string;
-    prix: string
+  nom: string;
+  quantite: string;
+  prix: string;
 }
 
-interface SaleState {
-    date: string;
-    articles: Article[];
-    total: string
+export interface SaleState {
+  id?: string;
+  date: string;
+  articles: Article[];
+  total: string;
 }
 
-// Composant Facture avec un ref typé
-const Facture = forwardRef<HTMLDivElement, { sale: SaleState }>(({ sale }, ref) => (
-    <div ref={ref} className="p-5 border">
-        <h2>Facture</h2>
-        <p><strong>Date:</strong> {sale.date}</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom du Produit</th>
-                    <th>Quantité</th>
-                    <th>Prix Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {sale.articles.map((article, idx) => (
-                    <tr key={idx}>
-                        <td>{article.nom}</td>
-                        <td>{article.quantite}</td>
-                        <td>{article.prix} FC</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        <p><strong>Total:</strong> {sale.total} FC</p>
-    </div>
-));
+// Fonction pour générer un PDF
+const generatePDF = (sale: SaleState) => {
+  const doc = new jsPDF();
 
-Facture.displayName = "Facture";
+  doc.setFontSize(18);
+  doc.text("Facture", 20, 20);
+
+  doc.setFontSize(12);
+  doc.text(`Date: ${sale.date}`, 20, 30);
+
+  const tableData = sale.articles.map((article, index) => [
+    index + 1,
+    article.nom,
+    article.quantite,
+    `${article.prix} FC`,
+  ]);
+
+  // Initial Y position for the table
+  let yPosition = 40;
+
+  // Render the table using autoTable
+  autoTable(doc, {
+    head: [["#", "Nom du Produit", "Quantité", "Prix Total"]],
+    body: tableData,
+    startY: yPosition,
+  });
+
+  // Manually calculate finalY (this assumes each row is of roughly the same height)
+  const rowHeight = 10; // adjust this based on your table style
+  const totalRows = tableData.length;
+  const finalY = yPosition + (totalRows * rowHeight);
+
+  // Add the total text after the table
+  doc.text(`Total: ${sale.total} FC`, 20, finalY + 10);
+
+  doc.save(`Facture_${sale.id}.pdf`);
+};
 
 export default function Sales() {
-    const dispatch = useDispatch<AppDispatch>();
-    const { loading, sales } = useSelector((state: RootState) => state.sale)
+  const dispatch = useDispatch<AppDispatch>();
+  const sales = useSelector((state: RootState) => state.sale.sales);
 
-    const printRef = useRef<HTMLDivElement>(null);
-    const handlePrint = useReactToPrint({
-        documentTitle: "Invoice",
-        pageStyle: "@page { size: auto; margin: 0mm; }",
-        content: () => printRef.current,
-    } as any);
+  useEffect(() => {
+    dispatch(fetchSales());
+  }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(fetchSales())
-    }, [dispatch])
+  return (
+    <>
+      <div className="text-2xl py-4">Ventes</div>
+      <SaleForm />
 
-    return (
-        <>
-            <div className="text-2xl py-4">ventes</div>
-            <SaleForm />
-
-            <div className="text-xl py-4">
-                les ventes enregistré
-            </div>
-            <table className="w-full text-center">
-                <thead>
-                    <tr className="border-b-[1px] border-gray-300">
-                        <th>Date</th>
-                        <th>Articles</th>
-                        <th>Prix total</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                {
-                    loading ? (<div>Loading...</div>) : (
-                        <tbody>
-                            {
-                                sales?.map(sale => (
-                                    <tr className="border-b-[1px] border-gray-300">
-                                        <td> {sale.date} </td>
-                                        <td>
-                                            {
-                                                sale.articles.map(article => (
-                                                    <span> nom: {article.nom}, qté: {article.quantite}, prixTot {article.prix} fc </span>
-                                                ))
-                                            }
-                                        </td>
-                                        <td> {sale.total} fc </td>
-                                        <td className="flex justify-center">
-                                            <Printer size={20} className="cursor-pointer" onClick={() => handlePrint()} />
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    )
-                }
-            </table>
-            {/* Facture cachée pour l'impression */}
-            <div style={{ display: "none" }}>
-                {sales!.length > 0 && <Facture sale={sales![0]} ref={printRef} />}
-            </div>
-        </>
-    )
-}
+      <div className="text-xl py-4">Les ventes enregistrées</div>
+      <table className="w-full text-center border-collapse border border-gray-300">
+        <thead>
+          <tr className="border-b-[1px] border-gray-300">
+            <th>Date</th>
+            <th>Articles</th>
+            <th>Prix total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sales && sales.length > 0 ? (
+            sales.map((sale) => (
+              <tr className="border-b-[1px] border-gray-300" key={sale.id}>
+                <td>{sale.date}</td>
+                <td>
+                  {sale.articles.map((article, idx) => (
+                    <span key={idx}>
+                      Nom: {article.nom}, Qté: {article.quantite}, PrixTot: {article.prix} FC{" "}
+                    </span>
+                  ))}
+                </td>
+                <td>{sale.total} FC</td>
+                <td className="flex justify-center">
+                  <Printer
+                    size={20}
+                    className="cursor-pointer"
+                    onClick={() => generatePDF(sale)}
+                  />
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr className="border-b-[1px] border-gray-300">
+              <td colSpan={4}>Pas de ventes enregistrées</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+};
