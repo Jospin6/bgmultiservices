@@ -18,6 +18,7 @@ import {
   fetchPrintedPapersCountCurrentMonth
 } from "@/features/impressionSlice"
 import { fetchTotalProductsInStock } from "@/features/productSlice"
+import {parseISODate} from "@/helpers/date"
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -100,7 +101,7 @@ export default function Home() {
           {sales && sales.length > 0 ? (
             sales!.map(sale => (
               <tr className="border-b-[1px] border-gray-300" key={sale.id}>
-                <td> {sale.date} </td>
+                <td> {parseISODate(sale.date)} </td>
                 <td>
                   { 
                     sale.articles.map(article => (

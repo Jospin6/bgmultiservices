@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "@/features/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImpressions } from "@/features/impressionSlice"
+import {parseISODate} from "@/helpers/date"
 
 export default function Impressions() {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,7 @@ export default function Impressions() {
                     {
                         impression?.map(impr => (
                             <tr className="border-b-[1px] border-gray-300" key={impr.id}>
-                                <td> {impr.date} </td>
+                                <td> {parseISODate(impr.date)} </td>
                                 <td> {impr.totalPapers} </td>
                                 <td> {impr.amount} fc </td>
                             </tr>

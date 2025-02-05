@@ -8,6 +8,7 @@ import { fetchSales } from "@/features/saleSlice";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {SaleState} from "@/helpers/types"
+import {parseISODate} from "@/helpers/date"
 
 
 // Fonction pour générer un PDF
@@ -18,7 +19,7 @@ const generatePDF = (sale: SaleState) => {
   doc.text("Facture", 20, 20);
 
   doc.setFontSize(12);
-  doc.text(`Date: ${sale.date}`, 20, 30);
+  doc.text(`Date: ${parseISODate(sale.date)}`, 20, 30);
 
   const tableData = sale.articles.map((article, index) => [
     index + 1,
@@ -75,7 +76,7 @@ export default function Sales() {
           {sales && sales.length > 0 ? (
             sales.map((sale) => (
               <tr className="border-b-[1px] border-gray-300" key={sale.id}>
-                <td>{sale.date}</td>
+                <td>{parseISODate(sale.date)}</td>
                 <td>
                   {sale.articles.map((article, idx) => (
                     <span key={idx}>

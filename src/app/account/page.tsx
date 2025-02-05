@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, createUser, deleteUser } from "@/features/authSlice";
 import { AppDispatch, RootState } from "@/features/store";
+import Link from "next/link";
+import { LogOut } from "lucide-react";
 
 export default function Account() {
     const dispatch = useDispatch<AppDispatch>();
@@ -76,6 +78,9 @@ export default function Account() {
                     ))}
                 </tbody>
             </table>
+            <div>
+                <Link href={"/connexion"} className="flex text-red-500 mt-4"><LogOut/> Deconnexion</Link>
+            </div>
         </div>
     );
 }

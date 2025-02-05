@@ -144,37 +144,41 @@ export const fetchLast10Sales = createAsyncThunk("sale/last10", async () => {
 
 // Fonction pour récupérer les ventes des 7 derniers jours
 export const fetchSalesLast7Days = createAsyncThunk("sale/last7Days", async () => {
-    // Calcul de la date de début pour les 7 derniers jours (sans dayjs)
+    // Calcul de la date de début pour les 7 derniers jours (sans dayjs)  
     const now = new Date();
     const startDate = new Date();
-    startDate.setDate(now.getDate() - 7); // Soustraire 7 jours
-    startDate.setHours(0, 0, 0, 0); // Mettre à zéro l'heure pour comparer uniquement les jours
+    startDate.setDate(now.getDate() - 7); // Soustraire 7 jours  
+    startDate.setHours(0, 0, 0, 0); // Mettre à zéro l'heure  
+
+    // Formatage de la date de début pour correspondre au format requis  
+    const startDateISOString = `${startDate.getUTCFullYear()}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${String(startDate.getUTCDate()).padStart(2, '0')}T00:00:00.000Z`;
 
     const salesRef = collection(db, "sales");
-    const q = query(salesRef, where("date", ">=", startDate.toISOString())); // Utilisation du format ISO
+    const q = query(salesRef, where("date", ">=", startDateISOString)); // Utilisation du format ISO  
     const snapshot = await getDocs(q);
 
-    // Initialisation des données des 7 derniers jours
+    // Initialisation des données des 7 derniers jours  
     let salesData: { [key: string]: number } = {};
 
     for (let i = 6; i >= 0; i--) {
         const date = new Date();
         date.setDate(now.getDate() - i);
-        const formattedDate = date.toISOString().split("T")[0]; // Format "YYYY-MM-DD"
-        salesData[formattedDate] = 0;
+        const formattedDate = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}T00:00:00.000Z`; // Format "YYYY-MM-DDTHH:mm:ss.sssZ"  
+        salesData[formattedDate.split("T")[0]] = 0; // Utiliser seulement la partie date  
     }
 
-    // Traitement des ventes pour chaque jour
+    // Traitement des ventes pour chaque jour  
     snapshot.docs.forEach((doc) => {
         const data = doc.data();
 
-        // Conversion de la date de la vente
-        const saleDateObj = new Date(data.date); // Supposé être une date au format ISO
-        const saleDate = saleDateObj.toISOString().split("T")[0]; // Format "YYYY-MM-DD"
+        // Conversion de la date de la vente  
+        const saleDateObj = new Date(data.date); // Supposé être une date au format ISO  
+        const saleDateISOString = `${saleDateObj.getUTCFullYear()}-${String(saleDateObj.getUTCMonth() + 1).padStart(2, '0')}-${String(saleDateObj.getUTCDate()).padStart(2, '0')}T00:00:00.000Z`; // Format "YYYY-MM-DDTHH:mm:ss.sssZ"  
+        const saleDate = saleDateISOString.split("T")[0]; // Format "YYYY-MM-DD"  
 
-        // Vérifier si la date appartient aux 7 derniers jours
+        // Vérifier si la date appartient aux 7 derniers jours  
         if (salesData.hasOwnProperty(saleDate)) {
-            salesData[saleDate] += data.articles.reduce((acc: number, article: { total: number; }) => acc + article.total, 0);
+            salesData[saleDate] += data.total;
         }
     });
 
