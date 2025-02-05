@@ -2,14 +2,62 @@
 import { SaleForm } from "@/components/saleForm";
 import { AppDispatch, RootState } from "@/features/store";
 import { Printer } from "lucide-react";
-import { useEffect } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSales } from "@/features/saleSlice"
+import { useReactToPrint } from "react-to-print";
 
+interface Article {
+    nom: string;
+    quantite: string;
+    prix: string
+}
+
+interface SaleState {
+    date: string;
+    articles: Article[];
+    total: string
+}
+
+// Composant Facture avec un ref typé
+const Facture = forwardRef<HTMLDivElement, { sale: SaleState }>(({ sale }, ref) => (
+    <div ref={ref} className="p-5 border">
+        <h2>Facture</h2>
+        <p><strong>Date:</strong> {sale.date}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom du Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {sale.articles.map((article, idx) => (
+                    <tr key={idx}>
+                        <td>{article.nom}</td>
+                        <td>{article.quantite}</td>
+                        <td>{article.prix} FC</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        <p><strong>Total:</strong> {sale.total} FC</p>
+    </div>
+));
+
+Facture.displayName = "Facture";
 
 export default function Sales() {
     const dispatch = useDispatch<AppDispatch>();
     const { loading, sales } = useSelector((state: RootState) => state.sale)
+
+    const printRef = useRef<HTMLDivElement>(null);
+    const handlePrint = useReactToPrint({
+        documentTitle: "Invoice",
+        pageStyle: "@page { size: auto; margin: 0mm; }",
+        content: () => printRef.current,
+    } as any);
 
     useEffect(() => {
         dispatch(fetchSales())
@@ -47,7 +95,9 @@ export default function Sales() {
                                             }
                                         </td>
                                         <td> {sale.total} fc </td>
-                                        <td className="flex justify-center"><Printer size={20} /></td>
+                                        <td className="flex justify-center">
+                                            <Printer size={20} className="cursor-pointer" onClick={() => handlePrint()} />
+                                        </td>
                                     </tr>
                                 ))
                             }
@@ -55,6 +105,10 @@ export default function Sales() {
                     )
                 }
             </table>
+            {/* Facture cachée pour l'impression */}
+            <div style={{ display: "none" }}>
+                {sales!.length > 0 && <Facture sale={sales![0]} ref={printRef} />}
+            </div>
         </>
     )
 }

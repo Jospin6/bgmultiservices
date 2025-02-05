@@ -2,9 +2,10 @@
 
 import SalesChart from "@/components/salesChart";
 import { AppDispatch, RootState } from "@/features/store";
-import { Printer } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 import {
   fetchLast10Sales,
   fetchSalesCountToday,
@@ -110,7 +111,7 @@ export default function Home() {
                       }
                     </td>
                     <td> {sale.total} fc </td>
-                    <td className="flex justify-center"><Printer size={20} /></td>
+                    <td className="flex justify-center"> <Link href={"/sales"}><ArrowRight size={20} /></Link></td>
                   </tr>
                 ))
               }
