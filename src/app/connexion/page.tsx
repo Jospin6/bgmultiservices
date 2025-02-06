@@ -28,7 +28,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-[300px] m-auto">
+    <div className="w-[300px] mt-4 m-auto">
       <h2 className="text-2xl pb-4">Connexion</h2>
       <form onSubmit={handleLogin} >
         <input type="text" placeholder="Votre nom" className="block pl-2 border-[1px] border-gray-300 w-full rounded-lg h-[35px] mb-2" onChange={(e) => setName(e.target.value)} />
