@@ -79,7 +79,7 @@ export default function Account() {
                 </tbody>
             </table>
             <div>
-                <Link href={"/connexion"} className="flex text-red-500 mt-4"><LogOut/> Deconnexion</Link>
+                <Link href={"/connexion"} className="flex text-red-500 mt-4"><LogOut /> Deconnexion</Link>
             </div>
         </div>
     );

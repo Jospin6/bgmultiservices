@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "@/features/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImpressions } from "@/features/impressionSlice"
-import {parseISODate} from "@/helpers/date"
+import { parseISODate } from "@/helpers/date"
 
 export default function Impressions() {
     const dispatch = useDispatch<AppDispatch>();
