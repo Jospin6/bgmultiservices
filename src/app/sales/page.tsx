@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "@/features/store";
 import { Printer, Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSales } from "@/features/saleSlice";
+import { fetchSales, deleteSale } from "@/features/saleSlice";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { SaleState } from "@/helpers/types"
@@ -57,6 +57,10 @@ export default function Sales() {
     dispatch(fetchSales());
   }, [dispatch]);
 
+  // remove item
+
+  const removeSale = (id: string | undefined) => dispatch(deleteSale(id!))
+
   return (
     <>
       <div className="text-2xl py-4">Ventes</div>
@@ -92,7 +96,7 @@ export default function Sales() {
                     onClick={() => generatePDF(sale)}
                   />
                   <span className="w-[10px]"></span>
-                  <Trash size={20} className="text-red-500" />
+                  <Trash size={20} onClick={() => removeSale(sale.id)} className="text-red-500 cursor-pointer" />
                 </td>
               </tr>
             ))

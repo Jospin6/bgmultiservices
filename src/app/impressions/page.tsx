@@ -3,7 +3,7 @@ import { ImpressionForm } from "@/components/impressionForm";
 import { AppDispatch, RootState } from "@/features/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchImpressions } from "@/features/impressionSlice"
+import { fetchImpressions, deleteImpression } from "@/features/impressionSlice"
 import { parseISODate } from "@/helpers/date"
 import { Trash } from "lucide-react";
 
@@ -14,6 +14,10 @@ export default function Impressions() {
     useEffect(() => {
         dispatch(fetchImpressions())
     }, [])
+
+    // remove item
+    
+      const removeImpression = (id: string | undefined) => dispatch(deleteImpression(id!))
 
     return (
         <>
@@ -39,7 +43,9 @@ export default function Impressions() {
                                 <td> {parseISODate(impr.date)} </td>
                                 <td> {impr.totalPapers} </td>
                                 <td> {impr.amount} fc </td>
-                                <td className="flex justify-center"><Trash size={20}/></td>
+                                <td className="flex justify-center">
+                                    <Trash size={20} className="text-red-500" onClick={()=> removeImpression(impr.id)}/>
+                                </td>
                             </tr>
                         ))
                     }

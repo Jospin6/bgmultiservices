@@ -3,7 +3,7 @@ import { ProductForm } from "@/components/productForm";
 import { AppDispatch, RootState } from "@/features/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, updateProduct } from "@/features/productSlice";
+import { fetchProducts, updateProduct, deleteProduct } from "@/features/productSlice";
 import { PlusCircle, Trash } from "lucide-react";
 
 interface ProductState {
@@ -46,6 +46,10 @@ export default function Products() {
         }
     };
 
+    // remove item
+
+    const removeProduct = (id: string | undefined) => dispatch(deleteProduct(id!))
+
     return (
         <>
             <div className="text-2xl py-4">produits</div>
@@ -73,7 +77,7 @@ export default function Products() {
                                     className="cursor-pointer"
                                 />
                                 <span className="w-[10px]"></span>
-                                <Trash size={20} className="text-red-500" />
+                                <Trash size={20} onClick={() => removeProduct(product.id)} className="cursor-pointer text-red-500" />
                             </td>
                         </tr>
                     ))}
