@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "@/features/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, updateProduct } from "@/features/productSlice";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Trash } from "lucide-react";
 
 interface ProductState {
     id?: string;
@@ -72,6 +72,8 @@ export default function Products() {
                                     onClick={() => handleOpenPopup(product)}
                                     className="cursor-pointer"
                                 />
+                                <span className="w-[10px]"></span>
+                                <Trash size={20} className="text-red-500" />
                             </td>
                         </tr>
                     ))}

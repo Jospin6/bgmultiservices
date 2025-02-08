@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImpressions } from "@/features/impressionSlice"
 import { parseISODate } from "@/helpers/date"
+import { Trash } from "lucide-react";
 
 export default function Impressions() {
     const dispatch = useDispatch<AppDispatch>();
@@ -28,6 +29,7 @@ export default function Impressions() {
                         <th>Date</th>
                         <th>Nombre des papiers</th>
                         <th>Montant</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +39,7 @@ export default function Impressions() {
                                 <td> {parseISODate(impr.date)} </td>
                                 <td> {impr.totalPapers} </td>
                                 <td> {impr.amount} fc </td>
+                                <td className="flex justify-center"><Trash size={20}/></td>
                             </tr>
                         ))
                     }

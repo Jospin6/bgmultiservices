@@ -1,14 +1,14 @@
 "use client";
 import { SaleForm } from "@/components/saleForm";
 import { AppDispatch, RootState } from "@/features/store";
-import { Printer } from "lucide-react";
+import { Printer, Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSales } from "@/features/saleSlice";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import {SaleState} from "@/helpers/types"
-import {parseISODate} from "@/helpers/date"
+import { SaleState } from "@/helpers/types"
+import { parseISODate } from "@/helpers/date"
 
 
 // Fonction pour générer un PDF
@@ -91,6 +91,8 @@ export default function Sales() {
                     className="cursor-pointer"
                     onClick={() => generatePDF(sale)}
                   />
+                  <span className="w-[10px]"></span>
+                  <Trash size={20} className="text-red-500" />
                 </td>
               </tr>
             ))
