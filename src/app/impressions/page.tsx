@@ -17,7 +17,7 @@ export default function Impressions() {
 
     // remove item
     
-      const removeImpression = (id: string | undefined) => dispatch(deleteImpression(id!))
+      const removeImpression = (id: string) => dispatch(deleteImpression(id))
 
     return (
         <>
@@ -44,7 +44,7 @@ export default function Impressions() {
                                 <td> {impr.totalPapers} </td>
                                 <td> {impr.amount} fc </td>
                                 <td className="flex justify-center">
-                                    <Trash size={20} className="text-red-500" onClick={()=> removeImpression(impr.id)}/>
+                                    <Trash size={20} className="text-red-500" onClick={()=> removeImpression(impr.id!)}/>
                                 </td>
                             </tr>
                         ))

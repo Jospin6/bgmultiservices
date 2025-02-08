@@ -48,7 +48,7 @@ export default function Products() {
 
     // remove item
 
-    const removeProduct = (id: string | undefined) => dispatch(deleteProduct(id!))
+    const removeProduct = (id: string) => dispatch(deleteProduct(id))
 
     return (
         <>
@@ -77,7 +77,7 @@ export default function Products() {
                                     className="cursor-pointer"
                                 />
                                 <span className="w-[10px]"></span>
-                                <Trash size={20} onClick={() => removeProduct(product.id)} className="cursor-pointer text-red-500" />
+                                <Trash size={20} onClick={() => removeProduct(product.id!)} className="cursor-pointer text-red-500" />
                             </td>
                         </tr>
                     ))}

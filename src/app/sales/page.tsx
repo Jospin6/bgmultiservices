@@ -59,7 +59,7 @@ export default function Sales() {
 
   // remove item
 
-  const removeSale = (id: string | undefined) => dispatch(deleteSale(id!))
+  const removeSale = (id: string) => dispatch(deleteSale(id))
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function Sales() {
                     onClick={() => generatePDF(sale)}
                   />
                   <span className="w-[10px]"></span>
-                  <Trash size={20} onClick={() => removeSale(sale.id)} className="text-red-500 cursor-pointer" />
+                  <Trash size={20} onClick={() => removeSale(sale.id!)} className="text-red-500 cursor-pointer" />
                 </td>
               </tr>
             ))
