@@ -5,12 +5,12 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where, g
 interface User {
   id?: string;
   name: string;
-  password: string;
+  password?: string;
   role: string;
 }
 
 interface AuthState {
-  user: string | null;
+  user: User | null;
   users: User[];
 }
 
@@ -28,18 +28,26 @@ export const loginUser = createAsyncThunk(
 
     if (!querySnapshot.empty) {
       const firstDocId = querySnapshot.docs[0].id;
+      const docRef = doc(db, 'users', firstDocId); // Référence du document par ID  
+      const docSnap = await getDoc(docRef);
 
-      // Stocker l'ID et le nom dans localStorage
-      localStorage.setItem("id", firstDocId);
-      localStorage.setItem("name", name);
+      // Récupération des données du document  
+      const userData = docSnap.data(); // Récupérez les données ici  
 
-      return name;
+      if (userData) {
+        // Stocker l'ID et le nom dans localStorage  
+        localStorage.setItem("id", docSnap.id);
+        localStorage.setItem("name", userData.name); 
+        localStorage.setItem("role", userData.role); 
+        return {name: userData.name, id: docSnap.id, role: userData.role};
+      }
+
+      
     }
 
     throw new Error("Identifiants incorrects");
   }
 );
-
 export const createUser = createAsyncThunk("auth/createUser", async (user: User) => {
   const usersRef = collection(db, "users");
   const docRef = await addDoc(usersRef, user);
@@ -81,6 +89,15 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      localStorage.removeItem("id")
+      localStorage.removeItem("name")
+      localStorage.removeItem("role")
+    },
+    currentUser: (state) => {
+      state.user = {
+        id: localStorage.getItem("id") || "", 
+        name: localStorage.getItem("name") || "", 
+        role: localStorage.getItem("role") || ""}
     }
   },
   extraReducers: (builder) => {
@@ -110,6 +127,6 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, currentUser } = authSlice.actions;
 export default authSlice.reducer;
 

@@ -3,9 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/features/store";
+import { useRouter } from "next/navigation";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const getCurrentUser = useSelector((state: RootState) => state.auth.user)
+  const navigation = useRouter();
+
+  useEffect(() => {
+    checkConnexion()
+  }, [])
+
+  const checkConnexion = () => getCurrentUser == null && navigation.push("/connexion")
 
   return (
     <nav className="w-full h-[80px] bg-blue-400 text-white shadow-md">
@@ -18,18 +29,30 @@ export const NavBar = () => {
           <Link href="/" className="hover:text-gray-200 transition">
             Accueil
           </Link>
-          <Link href="/sales" className="hover:text-gray-200 transition">
-            Vente
-          </Link>
-          <Link href="/products" className="hover:text-gray-200 transition">
-            Produits
-          </Link>
-          <Link href="/impressions" className="hover:text-gray-200 transition">
-            Impression
-          </Link>
-          <Link href="/account" className="hover:text-gray-200 transition">
-            Compte
-          </Link>
+          {getCurrentUser?.role != "impression"  && (
+            <Link href="/sales" className="hover:text-gray-200 transition">
+              Vente
+            </Link>
+          )}
+
+          {getCurrentUser?.role === "admin" && (
+            <Link href="/products" className="hover:text-gray-200 transition">
+              Produits
+            </Link>
+          )}
+
+          {getCurrentUser?.role != "caissier" && (
+            <Link href="/impressions" className="hover:text-gray-200 transition">
+              Impression
+            </Link>
+          )}
+
+          {getCurrentUser?.role === "admin" && (
+            <Link href="/account" className="hover:text-gray-200 transition">
+              Compte
+            </Link>
+          )}
+
         </div>
 
         {/* Menu Mobile (Bouton) */}
