@@ -53,7 +53,7 @@ export const SaleForm = () => {
     };
 
     return (
-        <div className="px-[10%]">
+        <div className="md:px-[10%] px-4">
             <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter une vente</h2>
             <div className="mt-2">
                 <label htmlFor="datejour">Date du jour</label>
@@ -74,7 +74,7 @@ export const SaleForm = () => {
             {articles.map((article, index) => (
                 <div key={index} className="mt-2">
                     <select
-                        className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2"
+                        className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2 mb-2"
                         value={article.nom}
                         onChange={(e) => {
                             const selectedProduct = products?.find(
@@ -95,7 +95,7 @@ export const SaleForm = () => {
                     </select>
                     <input
                         type="number"
-                        className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2"
+                        className="border-[1px] border-gray-300 rounded-lg pl-2 mr-2 mb-2"
                         placeholder="Quantité"
                         value={article.quantite}
                         onChange={(e) => {

@@ -35,7 +35,7 @@ export default function RootLayout({
         <ReduxProvider>
           {!pathname.includes("connexion") && (<NavBar />)}
 
-          <div className="px-[10%]">
+          <div className="lg:px-[10%] px-2">
             {children}
           </div>
         </ReduxProvider>

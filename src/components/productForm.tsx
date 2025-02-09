@@ -14,7 +14,7 @@ export const ProductForm = () => {
         e.preventDefault();
         dispatch(addProduct({ nom: name, prix: price, stock: stock }));
       };
-    return <div className="px-[10%]">
+    return <div className="md:px-[10%] px-4">
         <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter un Produit</h2>
         <form onSubmit={handleAddProduct}>
             <div className="mt-2">

@@ -3,26 +3,29 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/features/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/features/store";
 import { useRouter } from "next/navigation";
+import { currentUser } from "@/features/authSlice";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const getCurrentUser = useSelector((state: RootState) => state.auth.user)
   const navigation = useRouter();
 
   useEffect(() => {
+    dispatch(currentUser())
     checkConnexion()
   }, [])
 
   const checkConnexion = () => getCurrentUser == null && navigation.push("/connexion")
 
   return (
-    <nav className="w-full h-[80px] bg-blue-400 text-white shadow-md">
+    <nav className="w-full min-h-[80px] h-auto bg-blue-400 text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center h-full px-6">
         {/* Logo */}
-        <div className="text-2xl font-bold">BgMultiServices</div>
+        <div className="lg:text-2xl text-xl font-bold">BgMultiServices</div>
 
         {/* Menu Desktop */}
         <div className="hidden md:flex space-x-8 text-lg">
@@ -65,7 +68,7 @@ export const NavBar = () => {
 
       {/* Menu Mobile (Liste) */}
       {isOpen && (
-        <div className="md:hidden bg-blue-700 py-4 z-10">
+        <div className="md:hidden bg-blue-700 py-4 z-[100]">
           <div className="flex flex-col items-center space-y-4 text-lg">
             <Link href="/" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
               Accueil
