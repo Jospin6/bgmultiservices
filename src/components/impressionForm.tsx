@@ -24,7 +24,7 @@ export const ImpressionForm = () => {
 
     return (
         <div className="md:px-[10%] px-4">
-            <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Rapport d'impression</h2>
+            <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">{"Rapport d'impression"}</h2>
             <form onSubmit={handleAddImpression}> {/* Ajoutez onSubmit au formulaire */}
                 <div className="mt-2">
                     <label htmlFor="nom">Nombre de papiers</label>

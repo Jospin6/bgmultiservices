@@ -14,12 +14,12 @@ export const NavBar = () => {
   const getCurrentUser = useSelector((state: RootState) => state.auth.user)
   const navigation = useRouter();
 
+  const checkConnexion = () => getCurrentUser == null && navigation.push("/connexion")
+
   useEffect(() => {
     dispatch(currentUser())
     checkConnexion()
-  }, [])
-
-  const checkConnexion = () => getCurrentUser == null && navigation.push("/connexion")
+  }, [dispatch, checkConnexion])
 
   return (
     <nav className="w-full min-h-[80px] h-auto bg-blue-400 text-white shadow-md">

@@ -29,7 +29,7 @@ const generatePDF = (sale: SaleState) => {
   ]);
 
   // Initial Y position for the table
-  let yPosition = 40;
+  const yPosition = 40;
 
   // Render the table using autoTable
   autoTable(doc, {

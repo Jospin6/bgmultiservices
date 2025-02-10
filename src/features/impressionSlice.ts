@@ -36,11 +36,11 @@ export const fetchImpressions = createAsyncThunk("impression/fetchImpressions", 
     return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 });
 
-export const updateImpression = createAsyncThunk("impression/updateImpression", async ({ id, data }: { id: string; data: any }) => {
-    const productRef = doc(db, "impressions", id);
-    await updateDoc(productRef, data);
-    return { id, ...data };
-});
+// export const updateImpression = createAsyncThunk("impression/updateImpression", async ({ id, data }: { id: string; data: any }) => {
+//     const productRef = doc(db, "impressions", id);
+//     await updateDoc(productRef, data);
+//     return { id, ...data };
+// });
 
 export const deleteImpression = createAsyncThunk("impression/deleteImpression", async (id: string) => {
     await deleteDoc(doc(db, "impressions", id));
@@ -90,15 +90,10 @@ const impressionSlice = createSlice({
         builder.addCase(addImpression.fulfilled, (state, action: PayloadAction<ImpressionState>) => {
             state.impression = state.impression ? [...state.impression, action.payload] : [action.payload];
         });
-        builder.addCase(updateImpression.fulfilled, (state, action: PayloadAction<ImpressionState>) => {
-            if (state.impression) {
-                state.impression = state.impression.map(imp => imp.date === action.payload.date ? action.payload : imp);
-            }
         builder.addCase(deleteImpression.fulfilled, (state, action: PayloadAction<string>) => {
             if (state.impression) {
                 state.impression = state.impression.filter(imp => imp.id !== action.payload);
             }
-        });
         });
         builder.addCase(fetchImpressionsAmountCurrentMonth.fulfilled, (state, action: PayloadAction<any>) => {
             state.impressionsAmountCurrentMonth = action.payload
