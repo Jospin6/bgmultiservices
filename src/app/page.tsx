@@ -23,7 +23,6 @@ import {parseISODate} from "@/helpers/date"
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const {
-    loading,
     sales,
     salesCountToday,
     totalSalesCount,
@@ -43,7 +42,7 @@ export default function Home() {
     dispatch(fetchImpressionsAmountCurrentMonth())
     dispatch(fetchPrintedPapersCountCurrentMonth())
     dispatch(fetchTotalProductsInStock())
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -104,8 +103,8 @@ export default function Home() {
                 <td className="w-1/3"> {parseISODate(sale.date)} </td>
                 <td className="w-1/3">
                   { 
-                    sale.articles.map(article => (
-                      <span> nom: {article.nom}, qté: {article.quantite}, prixTot {article.prix} fc </span>
+                    sale.articles.map((article, index) => (
+                      <span key={index}> nom: {article.nom}, qté: {article.quantite}, prixTot {article.prix} fc </span>
                     ))
                   }
                 </td>

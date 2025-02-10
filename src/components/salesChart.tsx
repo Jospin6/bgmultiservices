@@ -11,8 +11,6 @@ const SalesChart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const salesLast7Days = useSelector((state: RootState) => state.sale.salesLast7Days);
 
-  console.log(`putain ce quoi ça: ${salesLast7Days}`)
-
   useEffect(() => {
     dispatch(fetchSalesLast7Days());
   }, [dispatch]);

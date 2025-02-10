@@ -15,7 +15,7 @@ export const SaleForm = () => {
 
     useEffect(() => {
         dispatch(fetchProducts());
-    }, []);
+    }, [dispatch]);
 
     const addArticle = () => {
         setArticles([...articles, { nom: "", quantite: 1, prix: 0 }]);

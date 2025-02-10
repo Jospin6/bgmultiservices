@@ -17,7 +17,7 @@ export default function Account() {
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(currentUser())
-    }, []);
+    }, [dispatch]);
 
     const handleCreateUser = (e: React.FormEvent) => {
         e.preventDefault();

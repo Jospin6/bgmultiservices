@@ -9,11 +9,11 @@ import { Trash } from "lucide-react";
 
 export default function Impressions() {
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, impression } = useSelector((state: RootState) => state.impression)
+    const { impression } = useSelector((state: RootState) => state.impression)
 
     useEffect(() => {
         dispatch(fetchImpressions())
-    }, [])
+    }, [dispatch])
 
     // remove item
     

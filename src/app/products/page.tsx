@@ -15,7 +15,7 @@ interface ProductState {
 
 export default function Products() {
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, products } = useSelector((state: RootState) => state.product);
+    const { products } = useSelector((state: RootState) => state.product);
 
     // États pour gérer l'ouverture du popup et le produit sélectionné
     const [showPopup, setShowPopup] = useState(false);
