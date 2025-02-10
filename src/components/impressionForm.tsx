@@ -16,7 +16,7 @@ export const ImpressionForm = () => {
         dispatch(addImpression({
             totalPapers: nbrPapier,
             amount: price,
-            date: new Date().toISOString()  
+            date: new Date().toISOString()
         }));
         setPrice(0);
         setNbrPapier(0);
