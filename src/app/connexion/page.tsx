@@ -1,15 +1,14 @@
 "use client"
+
 import { AppDispatch } from "@/features/store";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/features/authSlice";
-import { useRouter } from "next/navigation";
 
 export default function Connexion() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useRouter()
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -17,8 +16,8 @@ export default function Connexion() {
     try {
       const result = await dispatch(loginUser({ name, password })).unwrap();
   
-      if (result) {
-        navigation.push("/");
+      if (result) {;
+        window.location.href = "/"
       } else {
         console.error("Identifiants incorrects");
       }

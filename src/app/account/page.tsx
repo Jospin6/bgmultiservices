@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, createUser, deleteUser, logout, currentUser } from "@/features/authSlice";
 import { AppDispatch, RootState } from "@/features/store";
 import { LogOut } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Account() {
@@ -29,10 +30,7 @@ export default function Account() {
         dispatch(deleteUser(id));
     };
 
-    const handleUserLogout = () => {
-        dispatch(logout())
-        navigation.push("/connexion")
-    }
+    const handleLogout = () => dispatch(logout())
 
     return (
         <div className="p-6">
@@ -98,7 +96,17 @@ export default function Account() {
             </>)}
 
             <div>
-                <span className="flex text-red-500 mt-4 cursor-pointer" onClick={handleUserLogout}><LogOut />{getCurrentUser != null ? (<span>Deconnexion</span>) : (<span>Connexion</span>)}</span>
+                {getCurrentUser?.role != "" ? (
+                    <Link href={"/connexion"} onClick={handleLogout} className="flex text-red-500 mt-4">
+                        <LogOut /><span>Deconnexion</span>
+                    </Link>
+                ): (
+                    <Link href={"/connexion"} className="flex text-red-500 mt-4">
+                        <LogOut /><span>Connexion</span>
+                    </Link>
+                )}
+
+
             </div>
         </div>
     );

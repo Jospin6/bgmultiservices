@@ -20,16 +20,16 @@ export const NavBar = () => {
     <nav className={`w-full min-h-[80px] h-auto bg-blue-400 text-white shadow-md`}>
       <div className="container mx-auto flex justify-between items-center h-full px-6">
         {/* Logo */}
-        <div className="lg:text-2xl text-xl font-bold">BgMultiServices</div>
+        <div className="lg:text-2xl text-xl font-bold">LgMultiServices</div>
 
         {/* Menu Desktop */}
         <div className="hidden md:flex space-x-8 text-lg">
-          {user != null && (
+          <Link href="/" className="hover:text-gray-200 transition">
+            Accueil
+          </Link>
+          {user?.name != "" && (
             <>
-              <Link href="/" className="hover:text-gray-200 transition">
-                Accueil
-              </Link>
-              {user?.role != "impression" && (
+              {(user?.role == "admin" || user?.role == "caissier") && (
                 <Link href="/sales" className="hover:text-gray-200 transition">
                   Vente
                 </Link>
@@ -41,15 +41,16 @@ export const NavBar = () => {
                 </Link>
               )}
 
-              {user?.role != "caissier" && (
+              {(user?.role == "admin" || user?.role == "impression") && (
                 <Link href="/impressions" className="hover:text-gray-200 transition">
                   Impression
                 </Link>
               )}
+              <Link href="/account" className="hover:text-gray-200 transition">
+                Compte
+              </Link>
             </>)}
-          <Link href="/account" className="hover:text-gray-200 transition">
-            Compte
-          </Link>
+
 
         </div>
 
@@ -68,18 +69,30 @@ export const NavBar = () => {
             <Link href="/" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
               Accueil
             </Link>
-            <Link href="/sales" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
-              Vente
-            </Link>
-            <Link href="/products" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
-              Produits
-            </Link>
-            <Link href="/impressions" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
-              Impressions
-            </Link>
-            <Link href="/account" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
-              Compte
-            </Link>
+            {user?.name != "" && (
+              <>
+                {(user?.role == "admin" || user?.role == "caissier") && (
+                  <Link href="/sales" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                    Vente
+                  </Link>
+                )}
+
+                {user?.role === "admin" && (
+                  <Link href="/products" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                    Produits
+                  </Link>
+                )}
+
+                {(user?.role == "admin" || user?.role == "impression") && (
+                  <Link href="/impressions" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                    Impression
+                  </Link>
+                )}
+                <Link href="/account" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>
+                  Compte
+                </Link>
+              </>)}
+
           </div>
         </div>
       )}
