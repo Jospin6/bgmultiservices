@@ -11,10 +11,14 @@ import { currentUser } from "@/features/authSlice";
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const getCurrentUser = useSelector((state: RootState) => state.auth.user)
+  const { loading, user } = useSelector((state: RootState) => state.auth)
   const navigation = useRouter();
 
-  const checkConnexion = () => getCurrentUser == null && navigation.push("/connexion")
+  const checkConnexion = () => {
+    if (!loading) {
+      user == null && navigation.push("/connexion")
+    }
+  }
 
   useEffect(() => {
     dispatch(currentUser())
@@ -28,35 +32,37 @@ export const NavBar = () => {
         <div className="lg:text-2xl text-xl font-bold">BgMultiServices</div>
 
         {/* Menu Desktop */}
-        <div className="hidden md:flex space-x-8 text-lg">
-          <Link href="/" className="hover:text-gray-200 transition">
-            Accueil
-          </Link>
-          {getCurrentUser?.role != "impression"  && (
-            <Link href="/sales" className="hover:text-gray-200 transition">
-              Vente
+        {!loading && (
+          <div className="hidden md:flex space-x-8 text-lg">
+            <Link href="/" className="hover:text-gray-200 transition">
+              Accueil
             </Link>
-          )}
+            {user?.role != "impression" && (
+              <Link href="/sales" className="hover:text-gray-200 transition">
+                Vente
+              </Link>
+            )}
 
-          {getCurrentUser?.role === "admin" && (
-            <Link href="/products" className="hover:text-gray-200 transition">
-              Produits
-            </Link>
-          )}
+            {user?.role === "admin" && (
+              <Link href="/products" className="hover:text-gray-200 transition">
+                Produits
+              </Link>
+            )}
 
-          {getCurrentUser?.role != "caissier" && (
-            <Link href="/impressions" className="hover:text-gray-200 transition">
-              Impression
-            </Link>
-          )}
+            {user?.role != "caissier" && (
+              <Link href="/impressions" className="hover:text-gray-200 transition">
+                Impression
+              </Link>
+            )}
 
-          {getCurrentUser?.role === "admin" && (
-            <Link href="/account" className="hover:text-gray-200 transition">
-              Compte
-            </Link>
-          )}
+            {user?.role === "admin" && (
+              <Link href="/account" className="hover:text-gray-200 transition">
+                Compte
+              </Link>
+            )}
 
-        </div>
+          </div>
+        )}
 
         {/* Menu Mobile (Bouton) */}
         <div className="md:hidden">

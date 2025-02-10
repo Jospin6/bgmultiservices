@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from '@/servicces/firebase';
 import dayjs from "dayjs";
 

@@ -33,8 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          {!pathname.includes("connexion") && (<NavBar />)}
-
+          <NavBar />
           <div className="lg:px-[10%] px-2">
             {children}
           </div>

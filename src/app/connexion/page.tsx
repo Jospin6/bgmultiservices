@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "@/features/authSlice";
 import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function Connexion() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch<AppDispatch>();
