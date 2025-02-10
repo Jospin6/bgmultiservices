@@ -98,7 +98,17 @@ const authSlice = createSlice({
         id: localStorage.getItem("id") || "", 
         name: localStorage.getItem("name") || "", 
         role: localStorage.getItem("role") || ""}
-    }
+    },
+    checkUser: (state) => {  
+      const id = localStorage.getItem("id");  
+      const name = localStorage.getItem("name");  
+      const role = localStorage.getItem("role");  
+      if (id && name && role) {  
+        state.user = { id, name, role };  
+      } else {  
+        state.user = null;  
+      }  
+    }  
   },
   extraReducers: (builder) => {
     builder
@@ -127,6 +137,6 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout, currentUser } = authSlice.actions;
+export const { logout, currentUser, checkUser } = authSlice.actions;
 export default authSlice.reducer;
 
