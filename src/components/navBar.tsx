@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/features/store";
 import { currentUser } from "@/features/authSlice";
+import Image from "next/image";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,10 +18,10 @@ export const NavBar = () => {
   }, [dispatch])
 
   return (
-    <nav className={`w-full min-h-[80px] h-auto bg-blue-400 text-white shadow-md`}>
+    <nav className={`w-full min-h-[80px] h-auto bg-gray-800 text-white shadow-md`}>
       <div className="container mx-auto min-h-[80px] flex justify-between items-center h-full px-6">
         {/* Logo */}
-        <div className="lg:text-2xl text-xl font-bold">LgMultiServices</div>
+        <Image src="/images/logo.jpg" alt={"logo"} className="rounded-full " width={60} height={60} />
 
         {/* Menu Desktop */}
         <div className="hidden md:flex space-x-8 text-lg">

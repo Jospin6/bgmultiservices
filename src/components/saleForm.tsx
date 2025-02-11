@@ -6,15 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/features/store";
 import { SaleState, Article } from "@/helpers/types";
 import { fetchProducts, updateProduct } from "@/features/productSlice";
+import { currentUser } from "@/features/authSlice";
 
 export const SaleForm = () => {
     const [date, setDate] = useState("");
     const [articles, setArticles] = useState<Article[]>([]);
     const dispatch = useDispatch<AppDispatch>();
     const products = useSelector((state: RootState) => state.product.products);
+    const getCurrentUser = useSelector((state: RootState) => state.auth.user)
 
     useEffect(() => {
         dispatch(fetchProducts());
+        dispatch(currentUser())
     }, [dispatch]);
 
     const addArticle = () => {
@@ -29,6 +32,7 @@ export const SaleForm = () => {
         const saleData: SaleState = {
             date: new Date(date).toISOString(),
             articles,
+            user: getCurrentUser?.name,
             total,
         };
 

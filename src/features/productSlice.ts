@@ -5,6 +5,7 @@ import { db } from '@/servicces/firebase';
 interface ProductState {
     id?: string;
     nom: string;
+    user?: string;
     prix: number;
     stock: number;
 }

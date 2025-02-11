@@ -61,101 +61,132 @@ export default function Home() {
     return (
       <>
         <div className="md:grid md:grid-cols-8 md:gap-4 mt-4">
-          <CardItem
-            title={`${salesCountToday ?? 0}`}
-            subTitle={"Nbr vente du jour"}
-            Icon={
-              <ShoppingCart size={30} className="text-indigo-500" />}
-            className="md:col-span-2" />
-          <CardItem
-            title={`${salesAmountToday ?? 0} fc`}
-            subTitle={"Montant encaisé"}
-            Icon={<DollarSign size={30} className="text-emerald-500" />}
-            className="md:col-span-2" />
-          <CardItem
-            title={`${impressionsAmountCurrentMonth ?? 0} fc`}
-            subTitle={"Montant impression"}
-            Icon={<Printer size={30} className="text-pink-500" />}
-            className="md:col-span-2" />
-          <CardItem
-            title={`${printedPapersCountCurrentMonth ?? 0}`}
-            subTitle={"Nbr papiers sorties"}
-            Icon={<FileText size={30} className="text-sky-500" />}
-            className="md:col-span-2" />
+          {(user?.role === "admin" || user?.role === "caissier") && (
+            <>
+              <CardItem
+                title={`${salesCountToday ?? 0}`}
+                subTitle={"Nbr vente du jour"}
+                Icon={
+                  <ShoppingCart size={30} className="text-indigo-500" />}
+                className="md:col-span-2" />
+              <CardItem
+                title={`${salesAmountToday ?? 0} fc`}
+                subTitle={"Montant encaisé"}
+                Icon={<DollarSign size={30} className="text-emerald-500" />}
+                className="md:col-span-2" />
+            </>
+          )}
+
+          {(user?.role === "admin" || user?.role === "impression") && (
+            <>
+              <CardItem
+                title={`${impressionsAmountCurrentMonth ?? 0} fc`}
+                subTitle={"Montant impression"}
+                Icon={<Printer size={30} className="text-pink-500" />}
+                className="md:col-span-2" />
+              <CardItem
+                title={`${printedPapersCountCurrentMonth ?? 0}`}
+                subTitle={"Nbr papiers sorties"}
+                Icon={<FileText size={30} className="text-sky-500" />}
+                className="md:col-span-2" />
+            </>
+          )}
         </div>
         <div className="md:grid md:grid-cols-6 sm:block md:gap-4 mt-2">
-          <div className="md:col-span-3 shadow-lg rounded-lg h-auto p-[10px]">
-            <SalesChart />
-          </div>
+          {(user?.role === "admin" || user?.role === "caissier") && (
+            <>
+              <div className="md:col-span-3 shadow-lg rounded-lg h-auto p-[10px]">
+                <SalesChart />
+              </div>
+            </>
+          )}
+
           <div className="md:col-span-3 h-auto">
-            <CardItem
-              title={`${totalProductsInStock ?? 0}`}
-              subTitle={"Nbr produits en stock"}
-              Icon={<Boxes size={30} className="text-yellow-500" />}
-              className="md:col-span-2" />
-            <CardItem
-              title={`${totalSalesCount ?? 0}`}
-              subTitle={"Nbr total des ventes"}
-              Icon={<BarChart size={30} className="text-rose-500" />}
-              className="md:col-span-2" />
-            <CardItem
-              title={`${totalSalesAmount! + impressionsAmountCurrentMonth!} fc`}
-              subTitle={"Montant Total"}
-              Icon={<Wallet size={30} className="text-teal-500" />}
-              className="md:col-span-2" />
+            {(user?.role === "admin" || user?.role === "caissier") && (
+              <>
+                <CardItem
+                  title={`${totalProductsInStock ?? 0}`}
+                  subTitle={"Nbr produits en stock"}
+                  Icon={<Boxes size={30} className="text-yellow-500" />}
+                  className="md:col-span-2" />
+                <CardItem
+                  title={`${totalSalesCount ?? 0}`}
+                  subTitle={"Nbr total des ventes"}
+                  Icon={<BarChart size={30} className="text-rose-500" />}
+                  className="md:col-span-2" />
+              </>
+            )}
+            {(user?.role === "admin") && (
+              <>
+                <CardItem
+                  title={`${totalSalesAmount! + impressionsAmountCurrentMonth!} fc`}
+                  subTitle={"Montant Total"}
+                  Icon={<Wallet size={30} className="text-teal-500" />}
+                  className="md:col-span-2" />
+              </>
+            )}
           </div>
-        </div>
-        <div className="md:text-xl text-[14px] py-4 flex justify-between">
-          <span>les 10 derniers ventes</span>
-          {user?.role == "admin" && <Link href={"/rapports"} className="text-blue-700" >Voir les rapports</Link>}
         </div>
 
-        <table className="w-full text-center table-auto sm:table-fixed border-collapse border border-gray-300">
-          <thead>
-            <tr className="border-b-[1px] border-gray-300">
-              <th>Date</th>
-              <th>Articles</th>
-              <th>Prix total</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales && sales.length > 0 ? (
-              sales!.map(sale => (
-                <tr className="border-[1px] border-gray-300" key={sale.id}>
-                  <td className="w-1/3"> {parseISODate(sale.date)} </td>
-                  <td className="w-1/3">
-                    {
-                      sale.articles.map((article, index) => (
-                        <span key={index}>
-                          nom: {article.nom},
-                          qté: {article.quantite},
-                          prixTot {article.prix} fc
-                        </span>
-                      ))
-                    }
-                  </td>
-                  <td className="w-1/3"> {sale.total} fc </td>
-                  <td className="flex justify-center w-1/3">
-                    <Link href={"/sales"}><ArrowRight size={20} /></Link>
-                  </td>
+        {(user?.role === "admin" || user?.role === "caissier") && (
+          <>
+            <div className="md:text-xl text-[14px] py-4 flex justify-between">
+              <span>les 10 derniers ventes</span>
+              {user?.role == "admin" && <Link href={"/rapports"} className="text-blue-700" >Voir les rapports</Link>}
+            </div>
+
+            <table className="w-full text-center table-auto sm:table-fixed border-collapse border border-gray-300">
+              <thead>
+                <tr className="border-b-[1px] border-gray-300">
+                  <th>Date</th>
+                  <th>Articles</th>
+                  <th>Prix total</th>
+                  <th>Encodé par</th>
+                  <th>Actions</th>
                 </tr>
-              ))) : <tr className="border-b-[1px] border-gray-300">
-              <td colSpan={4}>Pas de ventes enregistrées</td>
-            </tr>
-            }
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {sales && sales.length > 0 ? (
+                  sales!.map(sale => (
+                    <tr className="border-[1px] border-gray-300" key={sale.id}>
+                      <td className="w-1/3"> {parseISODate(sale.date)} </td>
+                      <td className="w-1/3">
+                        {
+                          sale.articles.map((article, index) => (
+                            <span key={index}>
+                              nom: {article.nom},
+                              qté: {article.quantite},
+                              prixTot {article.prix} fc
+                            </span>
+                          ))
+                        }
+                      </td>
+                      <td className="w-1/3"> {sale.total} fc </td>
+                      <td className="w-1/3"> {sale.user} </td>
+                      <td className="flex justify-center w-1/3">
+                        <Link href={"/sales"}><ArrowRight size={20} /></Link>
+                      </td>
+                    </tr>
+                  ))) : <tr className="border-b-[1px] border-gray-300">
+                  <td colSpan={4}>Pas de ventes enregistrées</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </>
+        )}
       </>
     );
   } else {
     return (
-      <div className="text-center mt-4">
-        <p className="text-2xl">Bienvenue sur LgMultiServices</p>
-        <p className="text-xl">
-          <Link 
-            href={"/connexion"} 
-            className="text-blue-500">Connectez-vous</Link> pour accéder à votre compte</p>
+      <div className="flex justify-center items-center h-screen" style={{ backgroundImage: "url('/images/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
+        <p className="text-2xl text-white">
+          <span className="block mb-4">Bienvenue sur LgMultiServices</span>
+          <Link
+            href={"/connexion"}
+            className="text-blue-100 p-2 my-2 rounded-lg bg-blue-600">Connectez-vous</Link>
+          <span className="block mt-4">pour accéder à votre compte</span>
+        </p>
       </div>
     )
   }

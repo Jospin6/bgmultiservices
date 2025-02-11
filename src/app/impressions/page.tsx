@@ -33,6 +33,7 @@ export default function Impressions() {
                         <th>Date</th>
                         <th>Nombre des papiers</th>
                         <th>Montant</th>
+                        <th>Encodé par</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@ export default function Impressions() {
                                 <td> {parseISODate(impr.date)} </td>
                                 <td> {impr.totalPapers} </td>
                                 <td> {impr.amount} fc </td>
+                                <td> {impr.user} </td>
                                 <td className="flex justify-center">
                                     <Trash size={20} className="text-red-500" onClick={()=> removeImpression(impr.id!)}/>
                                 </td>

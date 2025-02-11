@@ -13,7 +13,7 @@ export default function Account() {
     const getCurrentUser = useSelector((state: RootState) => state.auth.user)
     const navigation = useRouter();
 
-    const [newUser, setNewUser] = useState({ name: "", password: "", role: "utilisateur" });
+    const [newUser, setNewUser] = useState({ name: "", password: "", role: "" });
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -23,7 +23,7 @@ export default function Account() {
     const handleCreateUser = (e: React.FormEvent) => {
         e.preventDefault();
         dispatch(createUser(newUser));
-        setNewUser({ name: "", password: "", role: "utilisateur" });
+        setNewUser({ name: "", password: "", role: "" });
     };
 
     const handleDeleteUser = (id: string) => {
@@ -66,6 +66,7 @@ export default function Account() {
                         onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
                         className="border p-2 rounded w-full"
                     >
+                        <option>Choix du rôle</option>
                         <option value="caissier">Caissier</option>
                         <option value="impression">Impression</option>
                         <option value="admin">Admin</option>

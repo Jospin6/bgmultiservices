@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 interface ImpressionState {
     id?: string;
     date: string;
+    user?: string;
     totalPapers: number;
     amount: number;
 }

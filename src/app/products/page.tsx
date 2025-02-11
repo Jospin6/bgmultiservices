@@ -61,6 +61,7 @@ export default function Products() {
                         <th>Article</th>
                         <th>Prix</th>
                         <th>Stock</th>
+                        <th>Encodé par</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -70,6 +71,7 @@ export default function Products() {
                             <td>{product.nom}</td>
                             <td>{product.prix} fc</td>
                             <td>{product.stock} pièces</td>
+                            <td>{product.user} </td>
                             <td className="flex justify-center">
                                 <PlusCircle
                                     size={20}

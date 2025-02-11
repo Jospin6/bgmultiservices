@@ -73,6 +73,7 @@ export default function Sales() {
             <th>Date</th>
             <th>Articles</th>
             <th>Prix total</th>
+            <th>Encodé par</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -89,6 +90,7 @@ export default function Sales() {
                   ))}
                 </td>
                 <td>{sale.total} FC</td>
+                <td>{sale.user}</td>
                 <td className="flex justify-center">
                   <Printer
                     size={20}

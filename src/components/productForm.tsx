@@ -1,19 +1,25 @@
 "use client"
-import { AppDispatch } from "@/features/store";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/features/store";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../features/productSlice";
+import { currentUser } from "@/features/authSlice";
 
 export const ProductForm = () => {
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
     const [stock, setStock] = useState(0);
     const dispatch = useDispatch<AppDispatch>();
+    const getCurrentUser = useSelector((state: RootState) => state.auth.user)
 
-      const handleAddProduct = (e: { preventDefault: () => void; }) => {
+    useEffect(() => {
+        dispatch(currentUser())
+    }, [dispatch]);
+
+    const handleAddProduct = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        dispatch(addProduct({ nom: name, prix: price, stock: stock }));
-      };
+        dispatch(addProduct({ nom: name, prix: price, stock: stock, user: getCurrentUser?.name }));
+    };
     return <div className="md:px-[10%] px-4">
         <h2 className="w-full bg-blue-400 p-4 rounded-t-lg text-white">Ajouter un Produit</h2>
         <form onSubmit={handleAddProduct}>

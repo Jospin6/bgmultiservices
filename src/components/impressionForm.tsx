@@ -1,20 +1,27 @@
 "use client";
-import { AppDispatch } from "@/features/store";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/features/store";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addImpression } from "@/features/impressionSlice";
+import { currentUser } from "@/features/authSlice";
 
 export const ImpressionForm = () => {
     const [nbrPapier, setNbrPapier] = useState<number>(0); // Spécifiez le type  
     const [price, setPrice] = useState<number>(0); // Spécifiez le type  
     const dispatch = useDispatch<AppDispatch>();
+    const getCurrentUser = useSelector((state: RootState) => state.auth.user)
     const today = new Date().setUTCHours(0, 0, 0, 0);
+
+    useEffect(() => {
+        dispatch(currentUser())
+    }, [dispatch]);
 
     const handleAddImpression = (e: React.FormEvent<HTMLFormElement>) => { // Typage correct de l'événement  
         e.preventDefault();
         dispatch(addImpression({
             totalPapers: nbrPapier,
             amount: price,
+            user: getCurrentUser?.name,
             date: new Date(today).toISOString()
         }));
         setPrice(0);

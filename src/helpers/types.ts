@@ -6,6 +6,7 @@ interface Article {
 
 interface SaleState {
     id?: string;
+    user?: string;
     date: string;
     articles: Article[];
     total: number

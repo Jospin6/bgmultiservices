@@ -26,13 +26,15 @@ export default function Connexion() {
   };
 
   return (
-    <div className="w-[300px] mt-4 m-auto">
-      <h2 className="text-2xl pb-4">Connexion</h2>
+    <div className="flex justify-center items-center h-screen" style={{backgroundImage: "url('/images/bg.jpg')", backgroundSize: "cover", backgroundPosition: "center"}}>
+      <div className="w-[300px] p-6 border-[1px] border-gray-300 rounded-lg">
+      <h2 className="text-2xl text-white bg-gray-800 rounded-lg p-2 mb-4">Connexion</h2>
       <form onSubmit={handleLogin} >
         <input type="text" placeholder="Votre nom" className="block pl-2 border-[1px] border-gray-300 w-full rounded-lg h-[35px] mb-2" onChange={(e) => setName(e.target.value)} />
         <input type="password" placeholder="Mot de passe" className="block pl-2 border-[1px] border-gray-300 w-full rounded-lg h-[35px]" onChange={(e) => setPassword(e.target.value)} />
         <button type="submit" className="px-[10px] py-[3px] rounded-lg bg-blue-400 my-2 text-gray-100">Se connecter</button>
       </form>
+    </div>
     </div>
   );
 }

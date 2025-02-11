@@ -120,6 +120,7 @@ export default function Rapports() {
                             <th>Date</th>
                             <th>Articles</th>
                             <th>Prix total</th>
+                            <th>Encodé par</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,6 +138,7 @@ export default function Rapports() {
                                         ))}
                                     </td>
                                     <td>{`${sale.total} fc`}</td>
+                                    <td>{`${sale.user ?? ""}`}</td>
                                 </tr>
                             ))
                         ) : (
@@ -155,6 +157,7 @@ export default function Rapports() {
                             <th>Date</th>
                             <th>Nombre des papiers</th>
                             <th>Montant</th>
+                            <th>Encodé par</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -164,6 +167,7 @@ export default function Rapports() {
                                     <td> {parseISODate(impr.date)} </td>
                                     <td> {impr.totalPapers} </td>
                                     <td> {impr.amount} fc </td>
+                                    <td> {impr.user} </td>
                                 </tr>
                             ))) : (
                             <tr className="border-b-[1px] border-gray-300">
