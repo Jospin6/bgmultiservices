@@ -15,7 +15,7 @@ import {
 } from "@/features/impressionSlice"
 import { fetchTotalProductsInStock } from "@/features/productSlice"
 import { parseISODate } from '@/helpers/date'
-import { BarChart, Boxes, DollarSign, FileText, LayoutDashboard, ShoppingCart, Wallet } from 'lucide-react'
+import { BarChart, Boxes, DollarSign, FileText, ShoppingCart, Wallet } from 'lucide-react'
 
 
 export default function Rapports() {
@@ -26,11 +26,11 @@ export default function Rapports() {
     const { totalProductsInStock } = useSelector((state: RootState) => state.product)
     const [date, setDate] = useState<string>(() => {
         const today = new Date();
-        return today.toISOString().split("T")[0]; // Convertit en format "YYYY-MM-DD"
+        return today.toISOString().split("T")[0];
     });
 
     const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setDate(e.target.value); // e.target.value est déjà au format "YYYY-MM-DD"
+        setDate(e.target.value);
     };
 
     useEffect(() => {
@@ -63,18 +63,54 @@ export default function Rapports() {
                 <input
                     type="date"
                     className="w-[300px] h-[35px] rounded-lg px-2 border-[1px] border-gray-300"
-                    value={date} // Assurez-vous que `date` est une string au format "YYYY-MM-DD"
-                    onChange={handleDateChange} // Garde la valeur sous forme de string
+                    value={date}
+                    onChange={handleDateChange}
                 />
             </div>
             <div className='md:grid md:grid-cols-6 md:gap-4'>
-                <CardItem title={`${salesAmountTDay} fc`} subTitle={'somme entré vente'} Icon={<ShoppingCart size={30} className="text-indigo-500" />} className='md:col-span-2' />
-                <CardItem title={`${sumImprDay} fc`} subTitle={'somme entré impression'} Icon={<DollarSign size={30} className="text-emerald-500" />} className='md:col-span-2' />
-                <CardItem title={`${salesAmountTDay + sumImprDay} fc`} subTitle={'somme total'} Icon={<Wallet size={30} className="text-teal-500" />} className='md:col-span-2' />
-                
-                <CardItem title={`${nbrImprDay}`} subTitle={'nbre papier sortie'} Icon={<FileText size={30} className="text-sky-500"/>} className='md:col-span-2' />
-                <CardItem title={`${nbrSalesDay}`} subTitle={'nbre ventes'} Icon={<BarChart size={30} className="text-rose-500" />} className='md:col-span-2' />
-                <CardItem title={`${totalProductsInStock}`} subTitle={'Qté produits en stock'} Icon={<Boxes size={30} className="text-yellow-500" />} className='md:col-span-2' />
+                <CardItem
+                    title={`${salesAmountTDay} fc`}
+                    subTitle={'somme entré vente'}
+                    Icon={
+                        <ShoppingCart size={30}
+                            className="text-indigo-500" />}
+                    className='md:col-span-2' />
+                <CardItem
+                    title={`${sumImprDay} fc`}
+                    subTitle={'somme entré impression'}
+                    Icon={
+                        <DollarSign size={30}
+                            className="text-emerald-500" />}
+                    className='md:col-span-2' />
+                <CardItem 
+                    title={`${salesAmountTDay + sumImprDay} fc`} 
+                    subTitle={'somme total'} 
+                    Icon={
+                        <Wallet size={30} 
+                            className="text-teal-500" />} 
+                    className='md:col-span-2' />
+
+                <CardItem 
+                    title={`${nbrImprDay}`} 
+                    subTitle={'nbre papier sortie'} 
+                    Icon={
+                        <FileText size={30} 
+                        className="text-sky-500" />} 
+                    className='md:col-span-2' />
+                <CardItem 
+                    title={`${nbrSalesDay}`} 
+                    subTitle={'nbre ventes'} 
+                    Icon={
+                        <BarChart size={30} 
+                        className="text-rose-500" />} 
+                    className='md:col-span-2' />
+                <CardItem 
+                    title={`${totalProductsInStock}`} 
+                    subTitle={'Qté produits en stock'} 
+                    Icon={
+                        <Boxes size={30} 
+                            className="text-yellow-500" />} 
+                    className='md:col-span-2' />
             </div>
             <div>
                 <h1 className='text-xl py-4'>les ventes du jour</h1>
@@ -94,7 +130,9 @@ export default function Rapports() {
                                     <td>
                                         {sale.articles.map((article, idx) => (
                                             <span key={idx}>
-                                                Nom: {article.nom}, Qté: {article.quantite}, PrixTot: {article.prix} FC{" "}
+                                                Nom: {article.nom}, 
+                                                Qté: {article.quantite}, 
+                                                PrixTot: {article.prix} FC{" "}
                                             </span>
                                         ))}
                                     </td>
