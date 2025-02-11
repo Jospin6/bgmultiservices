@@ -18,7 +18,7 @@ export const NavBar = () => {
 
   return (
     <nav className={`w-full min-h-[80px] h-auto bg-blue-400 text-white shadow-md`}>
-      <div className="container mx-auto flex justify-between items-center h-full px-6">
+      <div className="container mx-auto min-h-[80px] flex justify-between items-center h-full px-6">
         {/* Logo */}
         <div className="lg:text-2xl text-xl font-bold">LgMultiServices</div>
 

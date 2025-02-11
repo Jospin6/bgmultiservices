@@ -9,9 +9,12 @@ interface InitialState {
     totalSalesCount: number | null,
     salesAmountToday: number | null,
     totalSalesAmount: number | null,
-    salesLast7Days: any[] | null,
-    salesByProduct: any[] | null,
+    salesLast7Days: SaleState[] | null,
+    salesByProduct: SaleState[] | null,
     sales: SaleState[] | null,
+    salesAmountTDay: number,
+    nbrSalesDay: number | null,
+    allDaysSales: SaleState[] | null,
     error: string
 }
 
@@ -24,7 +27,10 @@ const initialState: InitialState = {
     salesCountToday: 0,
     totalSalesCount: 0,
     salesAmountToday: 0,
-    totalSalesAmount: 0
+    totalSalesAmount: 0,
+    salesAmountTDay: 0,
+    nbrSalesDay: 0,
+    allDaysSales: []
 }
 
 export const addSale = createAsyncThunk("sale/addSale", async (data: SaleState) => {
@@ -203,6 +209,41 @@ export const fetchSalesByProduct = createAsyncThunk("sale/byProduct", async () =
     return productSales;
 });
 
+export const fetchSumDaySales = createAsyncThunk("sale/fetchSumDaySales", async (date: string) => {
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    let totalAmount: number = 0;
+    snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        totalAmount += data.total;
+    });
+
+    return totalAmount;
+});
+
+export const fetchCountDaySales = createAsyncThunk("sale/fetchNumberDaySales", async (date: string) => {
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.length;
+});
+
+export const fetchAllDaysSales = createAsyncThunk("sale/fetchAllDaysSales", async (date: string) => {
+    const salesRef = collection(db, "sales");
+    const q = query(salesRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    const daysSales = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+
+    return daysSales;
+});
+
 const saleSlice = createSlice({
     name: "sale",
     initialState,
@@ -270,6 +311,15 @@ const saleSlice = createSlice({
             })
             .addCase(fetchSalesByProduct.fulfilled, (state, action: PayloadAction<any>) => {
                 state.salesByProduct = action.payload;
+            })
+            .addCase(fetchSumDaySales.fulfilled, (state, action: PayloadAction<any>) => {
+                state.salesAmountTDay = action.payload;
+            })
+            .addCase(fetchCountDaySales.fulfilled, (state, action: PayloadAction<any>) => {
+                state.nbrSalesDay = action.payload;
+            })
+            .addCase(fetchAllDaysSales.fulfilled, (state, action: PayloadAction<any>) => {
+                state.allDaysSales = action.payload;
             });
     }
 });

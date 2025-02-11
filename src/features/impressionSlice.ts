@@ -15,6 +15,9 @@ interface InitialState {
     impressionsAmountCurrentMonth: number | null,
     printedPapersCountCurrentMonth: number | null,
     impression: ImpressionState[] | null;
+    nbrImprDay: number | null,
+    sumImprDay: number,
+    allImprDay: ImpressionState[] | null;
     error: string;
 }
 
@@ -23,7 +26,10 @@ const initialState: InitialState = {
     impression: null,
     error: "",
     impressionsAmountCurrentMonth: 0,
-    printedPapersCountCurrentMonth: 0
+    printedPapersCountCurrentMonth: 0,
+    nbrImprDay: 0,
+    sumImprDay: 0,
+    allImprDay: []
 };
 
 export const addImpression = createAsyncThunk("impression/addImpression", async (data: ImpressionState) => {
@@ -71,6 +77,38 @@ export const fetchPrintedPapersCountCurrentMonth = createAsyncThunk("impression/
     return totalPrintedPapers;
 });
 
+export const fetchSumDayImpressions = createAsyncThunk("impression/fetchSumDayImpressions", async (date: string) => {
+    const impressionsRef = collection(db, "impressions");
+    const q = query(impressionsRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    let totalAmount: number = 0;
+    snapshot.docs.forEach((doc) => {
+        totalAmount += doc.data().amount || 0;
+    });
+    return totalAmount;
+});
+
+export const fetchCountDayImpressions = createAsyncThunk("impression/fetchCountDayImpressions", async (date: string) => {
+    const impressionsRef = collection(db, "impressions");
+    const q = query(impressionsRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    let totalPrintedPapers: number = 0;
+    snapshot.docs.forEach((doc) => {
+        totalPrintedPapers += doc.data().totalPapers || 0;
+    });
+    return totalPrintedPapers;
+});
+
+export const fetchAllDaysImpressions = createAsyncThunk("impression/fetchAllDaysImpressions", async (date: string) => {
+    const impressionsRef = collection(db, "impressions");
+    const q = query(impressionsRef, where("date", "==", date));
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+});
+
 const impressionSlice = createSlice({
     name: "impression",
     initialState,
@@ -100,6 +138,16 @@ const impressionSlice = createSlice({
         });
         builder.addCase(fetchPrintedPapersCountCurrentMonth.fulfilled, (state, action: PayloadAction<number>) => {
             state.printedPapersCountCurrentMonth = action.payload;
+        });
+
+        builder.addCase(fetchSumDayImpressions.fulfilled, (state, action: PayloadAction<number>) => {
+            state.sumImprDay = action.payload;
+        });
+        builder.addCase(fetchCountDayImpressions.fulfilled, (state, action: PayloadAction<number>) => {
+            state.nbrImprDay = action.payload;
+        });
+        builder.addCase(fetchAllDaysImpressions.fulfilled, (state, action: PayloadAction<any>) => {
+            state.allImprDay = action.payload;
         });
     }
 });

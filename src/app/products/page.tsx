@@ -55,9 +55,9 @@ export default function Products() {
             <div className="text-2xl py-4">produits</div>
             <ProductForm />
             <div className="text-xl py-4">les produits en stock</div>
-            <table className="w-full text-center">
+            <table className="w-full text-center mb-4">
                 <thead>
-                    <tr className="border-b-[1px] border-gray-300">
+                    <tr className="border-b-[1px] border-gray-300 border-collapse border border-gray-300">
                         <th>Article</th>
                         <th>Prix</th>
                         <th>Stock</th>
@@ -66,7 +66,7 @@ export default function Products() {
                 </thead>
                 <tbody>
                     {products?.map((product) => (
-                        <tr key={product.id} className="border-b-[1px] border-gray-300">
+                        <tr key={product.id} className="border-[1px] border-gray-300">
                             <td>{product.nom}</td>
                             <td>{product.prix} fc</td>
                             <td>{product.stock} pièces</td>

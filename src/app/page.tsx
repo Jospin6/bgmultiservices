@@ -2,9 +2,10 @@
 
 import SalesChart from "@/components/salesChart";
 import { AppDispatch, RootState } from "@/features/store";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BarChart, Boxes, DollarSign, FileText, Printer, ShoppingCart, Wallet } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LayoutDashboard } from 'lucide-react'
 import Link from "next/link";
 import {
   fetchLast10Sales,
@@ -20,6 +21,7 @@ import {
 import { fetchTotalProductsInStock } from "@/features/productSlice"
 import { parseISODate } from "@/helpers/date"
 import { currentUser } from "@/features/authSlice";
+import { CardItem } from "@/components/cardItem";
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,47 +53,27 @@ export default function Home() {
     return (
       <>
         <div className="md:grid md:grid-cols-8 md:gap-4 mt-4">
-          <div className="md:col-span-2 sm:block shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]"> {salesCountToday ?? 0} </div>
-            <div className="text-[14px] text-gray-400">Nbr vente du jour</div>
-          </div>
-          <div className="md:col-span-2 sm:block shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]"> {salesAmountToday ?? 0} fc </div>
-            <div className="text-[14px] text-gray-400">Montant encaisé</div>
-          </div>
-          <div className="md:col-span-2 sm:block shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]">{impressionsAmountCurrentMonth ?? 0} fc</div>
-            <div className="text-[14px] text-gray-400">Montant impression mois courant</div>
-          </div>
-          <div className="md:col-span-2 sm:block shadow-lg rounded-lg h-[100px] p-[10px]">
-            <div className="text-2xl font-[500]">{printedPapersCountCurrentMonth ?? 0}</div>
-            <div className="text-[14px] text-gray-400">Nbr papiers sorties</div>
-          </div>
+          <CardItem title={`${salesCountToday ?? 0}`} subTitle={"Nbr vente du jour"} Icon={<ShoppingCart size={30} className="text-indigo-500" />} className="md:col-span-2" />
+          <CardItem title={`${salesAmountToday ?? 0} fc`} subTitle={"Montant encaisé"} Icon={<DollarSign size={30} className="text-emerald-500" />} className="md:col-span-2" />
+          <CardItem title={`${impressionsAmountCurrentMonth ?? 0} fc`} subTitle={"Montant impression"} Icon={<Printer size={30} className="text-pink-500" />} className="md:col-span-2" />
+          <CardItem title={`${printedPapersCountCurrentMonth ?? 0}`} subTitle={"Nbr papiers sorties"} Icon={<FileText size={30} className="text-sky-500" />} className="md:col-span-2" />
         </div>
         <div className="md:grid md:grid-cols-6 sm:block md:gap-4 mt-2">
           <div className="md:col-span-3 shadow-lg rounded-lg h-auto p-[10px]">
             <SalesChart />
           </div>
           <div className="md:col-span-3 h-auto">
-            <div className="shadow-lg rounded-lg h-[100px] p-[10px]">
-              <div className="text-2xl font-[500]">{totalProductsInStock ?? 0}</div>
-              <div className="text-[14px] text-gray-400">Nbr produits en stock</div>
-            </div>
-            <div className="shadow-lg rounded-lg h-[100px] p-[10px]">
-              <div className="text-2xl font-[500]">{totalSalesCount ?? 0}</div>
-              <div className="text-[14px] text-gray-400">Nbr total des ventes</div>
-            </div>
-            <div className="shadow-lg rounded-lg h-[100px] p-[10px]">
-              <div className="text-2xl font-[500]">{totalSalesAmount ?? 0} fc</div>
-              <div className="text-[14px] text-gray-400">Tot montant ventes</div>
-            </div>
+            <CardItem title={`${totalProductsInStock ?? 0}`} subTitle={"Nbr produits en stock"} Icon={<Boxes size={30} className="text-yellow-500" />} className="md:col-span-2" />
+            <CardItem title={`${totalSalesCount ?? 0}`} subTitle={"Nbr total des ventes"} Icon={<BarChart size={30} className="text-rose-500" />} className="md:col-span-2" />
+            <CardItem title={`${totalSalesAmount! + impressionsAmountCurrentMonth!} fc`} subTitle={"Montant Total"} Icon={<Wallet size={30} className="text-teal-500" />} className="md:col-span-2" />
           </div>
         </div>
-        <div className="text-xl py-4">
-          les 10 derniers ventes
+        <div className="md:text-xl text-[14px] py-4 flex justify-between">
+          <span>les 10 derniers ventes</span>
+          {user?.role == "admin" && <Link href={"/rapports"} className="text-blue-700" >Voir les rapports</Link>}
         </div>
-  
-        <table className="w-full text-center table-auto sm:table-fixed">
+
+        <table className="w-full text-center table-auto sm:table-fixed border-collapse border border-gray-300">
           <thead>
             <tr className="border-b-[1px] border-gray-300">
               <th>Date</th>
@@ -103,7 +85,7 @@ export default function Home() {
           <tbody>
             {sales && sales.length > 0 ? (
               sales!.map(sale => (
-                <tr className="border-b-[1px] border-gray-300" key={sale.id}>
+                <tr className="border-[1px] border-gray-300" key={sale.id}>
                   <td className="w-1/3"> {parseISODate(sale.date)} </td>
                   <td className="w-1/3">
                     {
@@ -130,5 +112,5 @@ export default function Home() {
     )
   }
 
-  
+
 }
