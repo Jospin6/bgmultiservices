@@ -18,7 +18,7 @@
 
 ## Live Demo
 
-[Live Demo Link](https://myweatherapplication-ts.netlify.app/)
+[Live Demo Link](https://bgmultiservices-781c8.web.app/)
 
 ## Getting Started
 
