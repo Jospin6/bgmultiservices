@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BG Multi Services
+##  This project is a single page application built with TypeScript, react, Next, Firebase and redux.
+<hr />
+
+![screenshot](./dash.png)
+
+<hr />
+
+## Built With
+
+- typescript
+- React
+- Postman
+- NextJs 
+- Redux
+- Firebase
+- Netlify
+
+## Live Demo
+
+[Live Demo Link](https://myweatherapplication-ts.netlify.app/)
 
 ## Getting Started
 
-First, run the development server:
+Here are the steps to follow in order to get this project on your local computer.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`node v20.13.1 +`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`npm v9.5.0 +`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Setup
 
-## Learn More
+clone this repo by typing `git clone`
 
-To learn more about Next.js, take a look at the following resources:
+### Install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+install the dependacies by typing `npm install`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Usage
 
-## Deploy on Vercel
+start the local server by running `npm run start`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+this project is deployed on Netlify
+
+to get the deployment build of the code run `npm run build`
+
+### Testing
+
+this project uses vitest from testing , to run the tests type `npm test` 
+
+## Authors
+
+👤 **Jospin Ndaano**
+
+- Github: [@Jospin6](https://github.com/Jospin6)
+- Linkedin: [@Jospin](https://www.linkedin.com/in/jospin-ndagano-8474b7267/)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!
+
+Feel free to check the [issues page](issues/).
+
+## Show your support
+
+Give a ⭐️ if you like this project!
+
+## Acknowledgments
+
+- Hat tip to anyone whose code was used
+- Inspiration
+
+## 📝 License
+
+This project is [MIT](lic.url) licensed
